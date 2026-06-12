@@ -1,4 +1,4 @@
-/* Static content for the Magnus / Hermes showcase.
+/* Static content for the Magnus showcase.
    Everything here is descriptive, public-safe copy — no credentials,
    no addresses, no private data. */
 

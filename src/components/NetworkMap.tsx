@@ -83,7 +83,7 @@ export function NetworkMap({ selected, onSelect }: Props) {
         className="map-svg"
         viewBox="0 0 1000 650"
         role="group"
-        aria-label="Interactive map of the Magnus and Hermes network"
+        aria-label="Interactive map of the Magnus multiagent network"
       >
         <defs>
           <radialGradient id="hub-halo" cx="50%" cy="50%" r="50%">

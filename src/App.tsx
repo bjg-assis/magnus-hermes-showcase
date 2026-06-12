@@ -29,7 +29,7 @@ export default function App() {
       <header className="global-nav">
         <div className="global-nav-inner">
           <button type="button" className="brand" onClick={() => goTo('network')}>
-            Magnus <span className="brand-slash">/</span> Hermes
+            Magnus
           </button>
           <nav className="global-nav-links" aria-label="Sections">
             {TABS.map((t) => (
@@ -50,7 +50,7 @@ export default function App() {
       <section className="hero">
         <p className="hero-kicker">A constellation of helpful machines</p>
         <h1 className="hero-title">
-          Magnus <span className="title-amp">/</span> Hermes
+          Magnus - multiagentic AI System
         </h1>
         <p className="hero-sub">
           Three Macs, one private network, a crew of AI personas — Benjamin&apos;s personal mission control, run
@@ -114,7 +114,7 @@ export default function App() {
 
       <footer className="footer">
         <p>
-          Hermes Agent · a private constellation on Benjamin&apos;s own hardware · no clouds were harmed in the making
+          Magnus · a private constellation on Benjamin&apos;s own hardware · no clouds were harmed in the making
           of this network
         </p>
       </footer>
