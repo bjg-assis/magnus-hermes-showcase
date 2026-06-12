@@ -4,11 +4,11 @@ import type { MapNode, NodeId } from '../data'
 import { Icon } from './Icon'
 
 const ACCENT_HEX = {
-  cyan: '#36e0e8',
-  amber: '#ffc25e',
-  green: '#5ef0a8',
-  rose: '#ff9ec6',
-  ice: '#9ad2ff',
+  cyan: '#0071e3',
+  amber: '#c93400',
+  green: '#248a3d',
+  rose: '#d6336c',
+  ice: '#2997ff',
 } as const
 
 const SATELLITE_ANGLES: Record<string, number> = {
@@ -85,29 +85,18 @@ export function NetworkMap({ selected, onSelect }: Props) {
       >
         <defs>
           <radialGradient id="hub-halo" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#36e0e8" stopOpacity="0.32" />
-            <stop offset="60%" stopColor="#36e0e8" stopOpacity="0.07" />
-            <stop offset="100%" stopColor="#36e0e8" stopOpacity="0" />
+            <stop offset="0%" stopColor="#0071e3" stopOpacity="0.08" />
+            <stop offset="60%" stopColor="#0071e3" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="#0071e3" stopOpacity="0" />
           </radialGradient>
           <linearGradient id="edge-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#36e0e8" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#9ad2ff" stopOpacity="0.55" />
+            <stop offset="0%" stopColor="#0071e3" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#2997ff" stopOpacity="0.45" />
           </linearGradient>
-          <filter id="node-glow" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
+          <filter id="node-shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor="#000000" floodOpacity="0.12" />
           </filter>
         </defs>
-
-        {/* ambient star field */}
-        <g className="starfield" aria-hidden="true">
-          {STARS.map((s, i) => (
-            <circle key={i} cx={s[0]} cy={s[1]} r={s[2]} className="bg-star" style={{ animationDelay: `${s[3]}s` }} />
-          ))}
-        </g>
 
         <circle cx={HUB.x} cy={HUB.y} r="190" fill="url(#hub-halo)" aria-hidden="true" />
 
@@ -211,7 +200,7 @@ function StarNode({
       style={{ ['--node-accent' as string]: hex }}
     >
       <circle cx={node.x} cy={node.y} r={node.r + 10} className="node-aura" />
-      <circle cx={node.x} cy={node.y} r={node.r} className="node-core" filter="url(#node-glow)" />
+      <circle cx={node.x} cy={node.y} r={node.r} className="node-core" filter="url(#node-shadow)" />
       <circle cx={node.x} cy={node.y} r={node.r} className="node-rim" />
       <g transform={`translate(${node.x - 15}, ${node.y - 15})`} className="node-icon">
         <Icon name={node.icon} size={30} />
@@ -259,7 +248,7 @@ function SatelliteNode({
       style={{ ['--node-accent' as string]: hex }}
     >
       <circle cx={x} cy={y} r={node.r + 6} className="node-aura" />
-      <circle cx={x} cy={y} r={node.r} className="node-core" />
+      <circle cx={x} cy={y} r={node.r} className="node-core" filter="url(#node-shadow)" />
       <circle cx={x} cy={y} r={node.r} className="node-rim" />
       <g transform={`translate(${x - 9}, ${y - 9})`} className="node-icon">
         <Icon name={node.icon} size={18} />
@@ -270,13 +259,3 @@ function SatelliteNode({
     </g>
   )
 }
-
-/* fixed pseudo-random star field: [x, y, r, twinkle-delay] */
-const STARS: Array<[number, number, number, number]> = [
-  [60, 80, 1.4, 0], [180, 150, 1, 1.2], [250, 60, 1.8, 2.1], [340, 200, 1, 0.4],
-  [90, 480, 1.3, 1.7], [200, 420, 1, 2.6], [420, 520, 1.2, 0.9], [560, 470, 1, 1.5],
-  [620, 120, 1.5, 0.2], [720, 320, 1, 2.3], [760, 80, 1.2, 1.1], [930, 110, 1.6, 0.6],
-  [950, 300, 1, 1.9], [900, 560, 1.3, 2.8], [780, 600, 1, 0.8], [640, 620, 1.4, 1.4],
-  [380, 90, 1, 3.1], [150, 260, 1.1, 2.0], [40, 600, 1.5, 0.5], [490, 600, 1, 2.4],
-  [300, 330, 0.9, 1.0], [580, 220, 0.9, 0.3], [880, 380, 1.1, 1.6], [120, 180, 0.8, 2.9],
-]

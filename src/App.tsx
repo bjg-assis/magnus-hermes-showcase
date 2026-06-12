@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './App.css'
 import { NetworkMap } from './components/NetworkMap'
 import { Capabilities, DetailPanel, Journey, Personas, StatCard } from './components/Panels'
@@ -17,31 +17,59 @@ const TABS: Array<{ id: Tab; label: string }> = [
 export default function App() {
   const [tab, setTab] = useState<Tab>('network')
   const [selected, setSelected] = useState<NodeId>('magnus')
+  const stageRef = useRef<HTMLElement>(null)
+
+  const goTo = (t: Tab) => {
+    setTab(t)
+    stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <div className="shell">
-      <div className="aurora" aria-hidden="true">
-        <span className="aurora-blob a" />
-        <span className="aurora-blob b" />
-        <span className="aurora-blob c" />
-      </div>
-      <div className="grain" aria-hidden="true" />
+      <header className="global-nav">
+        <div className="global-nav-inner">
+          <button type="button" className="brand" onClick={() => goTo('network')}>
+            Magnus <span className="brand-slash">/</span> Hermes
+          </button>
+          <nav className="global-nav-links" aria-label="Sections">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                className={`global-nav-link ${tab === t.id ? 'current' : ''}`}
+                aria-current={tab === t.id ? 'true' : undefined}
+                onClick={() => goTo(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </header>
 
-      <header className="masthead">
-        <p className="masthead-kicker">A constellation of helpful machines</p>
-        <h1 className="masthead-title">
+      <section className="hero">
+        <p className="hero-kicker">A constellation of helpful machines</p>
+        <h1 className="hero-title">
           Magnus <span className="title-amp">/</span> Hermes
         </h1>
-        <p className="masthead-sub">
+        <p className="hero-sub">
           Three Macs, one private network, a crew of AI personas — Benjamin&apos;s personal mission control, run
           entirely from a chat window.
         </p>
+        <div className="hero-ctas">
+          <button type="button" className="cta-pill primary" onClick={() => goTo('network')}>
+            Explore the network
+          </button>
+          <button type="button" className="cta-pill secondary" onClick={() => goTo('personas')}>
+            Meet the crew
+          </button>
+        </div>
         <div className="stat-row">
           {STATS.map((s) => (
             <StatCard key={s.label} label={s.label} value={s.value} hint={s.hint} />
           ))}
         </div>
-      </header>
+      </section>
 
       <nav className="tab-bar" role="tablist" aria-label="Showcase sections">
         {TABS.map((t) => (
@@ -60,7 +88,7 @@ export default function App() {
         ))}
       </nav>
 
-      <main className="stage">
+      <main className="stage" ref={stageRef}>
         {tab === 'network' && (
           <section id="panel-network" role="tabpanel" aria-labelledby="tab-network" className="network-layout">
             <NetworkMap selected={selected} onSelect={setSelected} />
