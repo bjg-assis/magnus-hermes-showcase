@@ -23,6 +23,12 @@ export function DetailPanel({ selected }: { selected: NodeId }) {
           <li key={f}>{f}</li>
         ))}
       </ul>
+      {node.id === 'obsidian' && (
+        <figure className="vault-preview">
+          <img src="/assets/obsidian-graph.jpg" alt="Screenshot of Benjamin's Obsidian graph view" />
+          <figcaption>Benjamin’s real Obsidian graph view — the memory garden made visible.</figcaption>
+        </figure>
+      )}
       {node.body.map((p, i) => (
         <p key={i} className="detail-body">
           {p}

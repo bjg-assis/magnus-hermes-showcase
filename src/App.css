@@ -482,6 +482,11 @@
   pointer-events: none;
 }
 
+.obsidian-node-image {
+  pointer-events: none;
+  filter: saturate(1.08) contrast(1.04);
+}
+
 .node-name {
   font-family: var(--font-stack);
   font-size: 16px;
@@ -589,6 +594,29 @@
   border-radius: 980px;
   color: var(--text-secondary);
   background: var(--panel);
+}
+
+.vault-preview {
+  margin: 0 0 16px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #050505;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+}
+
+.vault-preview img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 0.72;
+  object-fit: cover;
+  object-position: center;
+}
+
+.vault-preview figcaption {
+  padding: 9px 12px 11px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .detail-body {

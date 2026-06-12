@@ -12,12 +12,14 @@ const ACCENT_HEX = {
 } as const
 
 const SATELLITE_ANGLES: Record<string, number> = {
-  boris: -150,
-  sterling: -90,
-  professor: -30,
+  boris: -162,
+  sterling: -112,
+  professor: -62,
+  surgeons: -12,
+  aegis: 38,
 }
 
-const ORBIT_R = 104
+const ORBIT_R = 126
 const HUB = { x: 500, y: 330 }
 
 interface Props {
@@ -96,6 +98,9 @@ export function NetworkMap({ selected, onSelect }: Props) {
           <filter id="node-shadow" x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor="#000000" floodOpacity="0.12" />
           </filter>
+          <clipPath id="obsidian-clip">
+            <circle cx="268" cy="548" r="42" />
+          </clipPath>
         </defs>
 
         <circle cx={HUB.x} cy={HUB.y} r="190" fill="url(#hub-halo)" aria-hidden="true" />
@@ -201,10 +206,23 @@ function StarNode({
     >
       <circle cx={node.x} cy={node.y} r={node.r + 10} className="node-aura" />
       <circle cx={node.x} cy={node.y} r={node.r} className="node-core" filter="url(#node-shadow)" />
+      {node.id === 'obsidian' ? (
+        <image
+          href="/assets/obsidian-graph.jpg"
+          x={node.x - node.r}
+          y={node.y - node.r}
+          width={node.r * 2}
+          height={node.r * 2}
+          preserveAspectRatio="xMidYMid slice"
+          clipPath="url(#obsidian-clip)"
+          className="obsidian-node-image"
+        />
+      ) : (
+        <g transform={`translate(${node.x - 15}, ${node.y - 15})`} className="node-icon">
+          <Icon name={node.icon} size={30} />
+        </g>
+      )}
       <circle cx={node.x} cy={node.y} r={node.r} className="node-rim" />
-      <g transform={`translate(${node.x - 15}, ${node.y - 15})`} className="node-icon">
-        <Icon name={node.icon} size={30} />
-      </g>
       <text x={node.x} y={labelY} className="node-name">
         {node.name}
       </text>

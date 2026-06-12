@@ -13,6 +13,8 @@ export type NodeId =
   | 'boris'
   | 'sterling'
   | 'professor'
+  | 'surgeons'
+  | 'aegis'
 
 export type Accent = 'cyan' | 'amber' | 'green' | 'rose' | 'ice'
 
@@ -55,10 +57,11 @@ export const NODES: MapNode[] = [
     r: 56,
     accent: 'cyan',
     icon: 'hub',
-    facts: ['Always on, 24/7', 'Canonical hub', 'Plans, routes, remembers'],
+    facts: ['Always on, 24/7', 'Canonical hub', 'Plans, routes, remembers', 'Future home for clinical helpers'],
     body: [
       'Magnus is the heart of the operation — an always-on Mac mini that never sleeps. When a message arrives, Magnus reads it, makes a plan, and decides who or what should handle it.',
       'Think of an air-traffic controller crossed with a chief of staff: Magnus rarely does everything personally, but everything passes through Magnus, and Magnus keeps the canonical record of what happened.',
+      'Surgeons’ Assistant and Aegis are shown here with Magnus as their intended future home, ready for a real migration from Nestor next Monday.',
     ],
   },
   {
@@ -100,7 +103,7 @@ export const NODES: MapNode[] = [
     r: 42,
     accent: 'rose',
     icon: 'vault',
-    facts: ['Notes & long-term memory', 'Grows over time', 'Readable by every agent'],
+    facts: ['Notes & long-term memory', 'Real Obsidian graph screenshot', 'Readable by every agent'],
     body: [
       'The Obsidian vault is the library of the constellation — a garden of interlinked notes where ideas, decisions, and context are planted and tended.',
       'Agents read it to remember what matters and write back what they learn, so the system gets more personal and more useful the longer it runs.',
@@ -182,6 +185,38 @@ export const NODES: MapNode[] = [
     body: [
       'The Professor is summoned for the questions that deserve more than a quick answer — deep research, careful comparison, patient explanation.',
       'Findings get written back into the Obsidian vault, so a question answered once becomes knowledge the whole constellation keeps.',
+    ],
+  },
+  {
+    id: 'surgeons',
+    name: 'Surgeons’ Assistant',
+    role: 'Clinical decision assistant · future Magnus specialist',
+    x: 0,
+    y: 0,
+    r: 20,
+    accent: 'cyan',
+    icon: 'shield',
+    satellite: true,
+    facts: ['Currently associated with Nestor', 'Shown with Magnus as future home', 'Decision-support only'],
+    body: [
+      'Surgeons’ Assistant is the careful clinical decision-support helper: structured questions, differential thinking, guideline-aware summaries, and safety caveats.',
+      'It is shown orbiting Magnus because that is the intended operational future — a clinical specialist on the always-on hub, not just on Nestor’s MacBook.',
+    ],
+  },
+  {
+    id: 'aegis',
+    name: 'Aegis',
+    role: 'Personal health coach · future Magnus specialist',
+    x: 0,
+    y: 0,
+    r: 20,
+    accent: 'green',
+    icon: 'heart',
+    satellite: true,
+    facts: ['Currently associated with Nestor', 'Shown with Magnus as future home', 'Personal health coaching'],
+    body: [
+      'Aegis is the personal health coach: habits, wellbeing, routines, and gentle accountability rather than emergency medicine.',
+      'Like Surgeons’ Assistant, it is displayed with Magnus to preview the planned migration into the always-on agent constellation.',
     ],
   },
 ]
@@ -396,6 +431,30 @@ export const PERSONAS: Persona[] = [
     traits: ['Curious', 'Thorough', 'Loves a footnote'],
   },
   {
+    id: 'surgeons',
+    name: 'Surgeons’ Assistant',
+    title: 'Clinical Decision Assistant',
+    status: 'standby',
+    statusLabel: 'Moving to Magnus',
+    accent: 'cyan',
+    icon: 'shield',
+    description:
+      'A careful clinical support specialist for structured thinking, safety checks, guideline-aware summaries, and decision-support-only caveats. Currently Nestor-associated; shown here in its planned Magnus home.',
+    traits: ['Clinical safety', 'Structured thinking', 'Decision-support only'],
+  },
+  {
+    id: 'aegis',
+    name: 'Aegis',
+    title: 'Personal Health Coach',
+    status: 'standby',
+    statusLabel: 'Moving to Magnus',
+    accent: 'green',
+    icon: 'heart',
+    description:
+      'A personal health and wellbeing coach for routines, habits, recovery, and gentle accountability. Currently Nestor-associated; shown here in its planned Magnus home.',
+    traits: ['Wellbeing', 'Habits', 'Accountability'],
+  },
+  {
     id: 'future',
     name: 'Future Workers',
     title: 'Seats held open',
@@ -466,5 +525,5 @@ export const STATS = [
   { label: 'Tools', value: TOOLS.length, hint: 'hands-on capabilities' },
   { label: 'Skills', value: SKILLS.length, hint: 'reusable playbooks' },
   { label: 'Models', value: MODELS.length, hint: 'swappable minds' },
-  { label: 'Agents', value: 6, hint: 'named personas' },
+  { label: 'Agents', value: PERSONAS.filter((p) => p.id !== 'future').length, hint: 'named personas' },
 ] as const

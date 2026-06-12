@@ -118,6 +118,12 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M9 11.8l2.2 2.2L15.5 9.5" />
     </>
   ),
+  heart: (
+    <>
+      <path d="M12 20.5S4.5 16.2 4.5 9.8A4.1 4.1 0 0 1 12 7.5a4.1 4.1 0 0 1 7.5 2.3c0 6.4-7.5 10.7-7.5 10.7z" />
+      <path d="M8.5 12h2l1-2.3 2 5 1-2.7h1.8" />
+    </>
+  ),
 }
 
 export function Icon({ name, size = 22 }: { name: string; size?: number }) {
