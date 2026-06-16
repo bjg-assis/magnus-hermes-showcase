@@ -11,7 +11,7 @@ const ACCENT_HEX = {
   ice: '#2997ff',
 } as const
 
-const SATELLITE_ANGLES: Record<string, number> = {
+const MAGNUS_SATELLITE_ANGLES: Record<string, number> = {
   boris: -162,
   sterling: -112,
   professor: -62,
@@ -19,8 +19,22 @@ const SATELLITE_ANGLES: Record<string, number> = {
   aegis: 38,
 }
 
+const BORIS_SKILL_ANGLES: Record<string, number> = {
+  aiworker: 215,
+  orcaforge: 145,
+}
+
 const ORBIT_R = 126
+const BORIS_SKILL_ORBIT_R = 54
 const HUB = { x: 500, y: 330 }
+
+const pointOnOrbit = (origin: { x: number; y: number }, radius: number, angleDeg: number) => {
+  const angle = (angleDeg * Math.PI) / 180
+  return {
+    x: origin.x + radius * Math.cos(angle),
+    y: origin.y + radius * Math.sin(angle),
+  }
+}
 
 interface Props {
   selected: NodeId
@@ -48,7 +62,9 @@ export function NetworkMap({ selected, onSelect }: Props) {
   const stopDemo = () => setDemoStep(-1)
 
   const mainNodes = useMemo(() => NODES.filter((n) => !n.satellite), [])
-  const satellites = useMemo(() => NODES.filter((n) => n.satellite), [])
+  const magnusSatellites = useMemo(() => NODES.filter((n) => n.satellite && n.id in MAGNUS_SATELLITE_ANGLES), [])
+  const borisSkillNodes = useMemo(() => NODES.filter((n) => n.satellite && n.id in BORIS_SKILL_ANGLES), [])
+  const borisPoint = pointOnOrbit(HUB, ORBIT_R, MAGNUS_SATELLITE_ANGLES.boris)
 
   const isDim = (id: NodeId) => demoRunning && step !== null && !step.highlight.includes(id)
 
@@ -132,10 +148,8 @@ export function NetworkMap({ selected, onSelect }: Props) {
         {/* orbit ring + standby satellites around Magnus */}
         <circle cx={HUB.x} cy={HUB.y} r={ORBIT_R} className="orbit-ring" aria-hidden="true" />
         <g className="orbit-group">
-          {satellites.map((n) => {
-            const angle = (SATELLITE_ANGLES[n.id] * Math.PI) / 180
-            const sx = HUB.x + ORBIT_R * Math.cos(angle)
-            const sy = HUB.y + ORBIT_R * Math.sin(angle)
+          {magnusSatellites.map((n) => {
+            const { x: sx, y: sy } = pointOnOrbit(HUB, ORBIT_R, MAGNUS_SATELLITE_ANGLES[n.id])
             return (
               <SatelliteNode
                 key={n.id}
@@ -145,6 +159,38 @@ export function NetworkMap({ selected, onSelect }: Props) {
                 selected={selected === n.id}
                 dim={isDim(n.id)}
                 onSelect={onSelect}
+              />
+            )
+          })}
+        </g>
+
+        {/* Boris-linked builder skills */}
+        <circle
+          cx={borisPoint.x}
+          cy={borisPoint.y}
+          r={BORIS_SKILL_ORBIT_R}
+          className="orbit-ring skill-orbit-ring"
+          aria-hidden="true"
+        />
+        <g className="skill-link-group" aria-hidden="true">
+          {borisSkillNodes.map((n) => {
+            const { x: sx, y: sy } = pointOnOrbit(borisPoint, BORIS_SKILL_ORBIT_R, BORIS_SKILL_ANGLES[n.id])
+            return <line key={n.id} x1={borisPoint.x} y1={borisPoint.y} x2={sx} y2={sy} className="skill-link" />
+          })}
+        </g>
+        <g className="orbit-group skill-orbit-group">
+          {borisSkillNodes.map((n) => {
+            const { x: sx, y: sy } = pointOnOrbit(borisPoint, BORIS_SKILL_ORBIT_R, BORIS_SKILL_ANGLES[n.id])
+            return (
+              <SatelliteNode
+                key={n.id}
+                node={n}
+                x={sx}
+                y={sy}
+                selected={selected === n.id}
+                dim={isDim(n.id)}
+                onSelect={onSelect}
+                compact
               />
             )
           })}
@@ -239,6 +285,7 @@ function SatelliteNode({
   y,
   selected,
   dim,
+  compact = false,
   onSelect,
 }: {
   node: MapNode
@@ -246,12 +293,15 @@ function SatelliteNode({
   y: number
   selected: boolean
   dim: boolean
+  compact?: boolean
   onSelect: (id: NodeId) => void
 }) {
   const hex = ACCENT_HEX[node.accent]
+  const iconSize = compact ? 14 : 18
+  const iconOffset = iconSize / 2
   return (
     <g
-      className={`node satellite ${selected ? 'selected' : ''} ${dim ? 'dim' : ''}`}
+      className={`node satellite ${compact ? 'skill-node' : ''} ${selected ? 'selected' : ''} ${dim ? 'dim' : ''}`}
       role="button"
       tabIndex={0}
       aria-label={`${node.name} — ${node.role}`}
@@ -268,8 +318,8 @@ function SatelliteNode({
       <circle cx={x} cy={y} r={node.r + 6} className="node-aura" />
       <circle cx={x} cy={y} r={node.r} className="node-core" filter="url(#node-shadow)" />
       <circle cx={x} cy={y} r={node.r} className="node-rim" />
-      <g transform={`translate(${x - 9}, ${y - 9})`} className="node-icon">
-        <Icon name={node.icon} size={18} />
+      <g transform={`translate(${x - iconOffset}, ${y - iconOffset})`} className="node-icon">
+        <Icon name={node.icon} size={iconSize} />
       </g>
       <text x={x} y={y - node.r - 8} className="node-name small">
         {node.name}

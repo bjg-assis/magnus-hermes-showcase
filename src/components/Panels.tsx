@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { JOURNEY, MODELS, NODES, PERSONAS, SKILLS, TOOLS } from '../data'
+import { JOURNEY, MODELS, NODES, PERSONAS, SKILLS, TOOLS, UPGRADES } from '../data'
 import type { NodeId } from '../data'
 import { Icon } from './Icon'
 
@@ -26,7 +26,7 @@ export function DetailPanel({ selected }: { selected: NodeId }) {
       {node.id === 'obsidian' && (
         <figure className="vault-preview">
           <img src="/assets/obsidian-graph.jpg" alt="Screenshot of Benjamin's Obsidian graph view" />
-          <figcaption>Benjamin’s real Obsidian graph view — the memory garden made visible.</figcaption>
+          <figcaption>Sanitized Obsidian graph preview — the memory garden made visible.</figcaption>
         </figure>
       )}
       {node.body.map((p, i) => (
@@ -80,6 +80,70 @@ export function StatCard({ label, value, hint }: { label: string; value: number;
 export function Capabilities() {
   return (
     <div className="tab-pane">
+      <section className="cap-section system-section">
+        <header className="section-head">
+          <h2>What makes the constellation different</h2>
+          <p>
+            It is not one chatbot. It is a private operating system where machines, personas, skills, tools, and
+            models are deliberately separate — so each request can use the right combination.
+          </p>
+        </header>
+        <div className="system-grid">
+          <article className="system-card rise">
+            <span className="system-kicker">Topology</span>
+            <h3>Three computers, one mesh</h3>
+            <p>Magnus stays always-on, Apollo takes heavy remote lanes, and Nestor travels on the MacBook for strategic sessions.</p>
+          </article>
+          <article className="system-card rise" style={{ animationDelay: '60ms' }}>
+            <span className="system-kicker">Accountability</span>
+            <h3>Many agents, one handoff</h3>
+            <p>Specialists can be summoned, but Magnus keeps the thread and Boris remains accountable for engineering work.</p>
+          </article>
+          <article className="system-card rise" style={{ animationDelay: '120ms' }}>
+            <span className="system-kicker">Intelligence</span>
+            <h3>Model-agnostic by design</h3>
+            <p>Claude, GPT/Codex, Grok, OpenRouter, and future models can be routed per task instead of locking the system to one lab.</p>
+          </article>
+          <article className="system-card rise" style={{ animationDelay: '180ms' }}>
+            <span className="system-kicker">Execution</span>
+            <h3>Skills turn plans into runs</h3>
+            <p>AI Worker, OrcaForge, research, scheduling, vault gardening, and home routines are reusable playbooks agents can invoke.</p>
+          </article>
+        </div>
+        <div className="grammar-card rise" style={{ animationDelay: '240ms' }}>
+          <h3>The system grammar</h3>
+          <dl>
+            <div><dt>Agent</dt><dd>the named role responsible for judgment and tone — Magnus, Boris, Nestor, Sterling.</dd></div>
+            <div><dt>Skill</dt><dd>a reusable playbook the agent can run — AI Worker, OrcaForge, Deep Research.</dd></div>
+            <div><dt>Tool</dt><dd>a concrete capability — terminal, browser, files, GitHub, Home Assistant.</dd></div>
+            <div><dt>Model</dt><dd>the reasoning engine currently plugged in, chosen per task and replaceable over time.</dd></div>
+          </dl>
+        </div>
+      </section>
+
+
+      <section className="cap-section upgrade-section">
+        <header className="section-head wide">
+          <span className="section-label">New operating layer</span>
+          <h2>The past week turned the constellation into a real multi-agent system</h2>
+          <p>
+            The big upgrade is not a single new chatbot. It is the infrastructure around the agents: scheduled
+            maintenance, safer updates, explicit ownership, background missions, public deployment gates, and
+            cross-machine drift control.
+          </p>
+        </header>
+        <div className="upgrade-grid">
+          {UPGRADES.map((u, i) => (
+            <article className={`upgrade-card accent-${u.accent} rise`} key={u.name} style={{ animationDelay: `${i * 65}ms` }}>
+              <span className="upgrade-eyebrow">{u.eyebrow}</span>
+              <h3>{u.name}</h3>
+              <p>{u.blurb}</p>
+              <span className="upgrade-proof">{u.proof}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="cap-section">
         <header className="section-head">
           <h2>Tools — the hands</h2>

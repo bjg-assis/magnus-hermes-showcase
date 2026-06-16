@@ -64,6 +64,15 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20M8 7.5h8" />
     </>
   ),
+  forge: (
+    <>
+      <path d="M5 19h14" />
+      <path d="M7 19v-6l5-4 5 4v6" />
+      <path d="M9.5 19v-4h5v4" />
+      <path d="M8 9.5 5.5 7l2-2 2.5 2.5M16 9.5 18.5 7l-2-2-2.5 2.5" />
+      <path d="M12 9V4" />
+    </>
+  ),
   plus: <path d="M12 5v14M5 12h14" />,
   browser: (
     <>

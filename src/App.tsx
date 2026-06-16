@@ -48,20 +48,21 @@ export default function App() {
       </header>
 
       <section className="hero">
-        <p className="hero-kicker">A constellation of helpful machines</p>
+        <p className="hero-kicker">A stronger multi-agent operating system</p>
         <h1 className="hero-title">
-          Magnus - multiagentic AI System
+          Magnus — private AI mission control, now with an operations layer
         </h1>
         <p className="hero-sub">
-          Three Macs, one private network, a crew of AI personas — Benjamin&apos;s personal mission control, run
-          entirely from a chat window.
+          A private AI constellation across three Macs and Home Assistant: Magnus coordinates, specialists execute,
+          Boris forges builds, weekly maintenance keeps the estate current, and every result comes back through one
+          accountable Telegram hub.
         </p>
         <div className="hero-ctas">
           <button type="button" className="cta-pill primary" onClick={() => goTo('network')}>
             Explore the network
           </button>
           <button type="button" className="cta-pill secondary" onClick={() => goTo('personas')}>
-            Meet the crew
+            See what changed
           </button>
         </div>
         <div className="stat-row">
@@ -114,8 +115,7 @@ export default function App() {
 
       <footer className="footer">
         <p>
-          Magnus · a private constellation on Benjamin&apos;s own hardware · no clouds were harmed in the making
-          of this network
+          Magnus · local hardware, private mesh, model-agnostic intelligence · public access limited to Telegram
         </p>
       </footer>
     </div>

@@ -15,6 +15,8 @@ export type NodeId =
   | 'professor'
   | 'surgeons'
   | 'aegis'
+  | 'aiworker'
+  | 'orcaforge'
 
 export type Accent = 'cyan' | 'amber' | 'green' | 'rose' | 'ice'
 
@@ -45,7 +47,8 @@ export const NODES: MapNode[] = [
     facts: ['Works from any phone', 'Text, voice notes, photos', 'The only door in'],
     body: [
       'Every conversation starts here. Benjamin sends a message from his phone — a question, a task, a half-formed idea — exactly like texting a friend.',
-      'Telegram is the single doorway into the whole system. Nothing else is exposed to the outside world, which keeps the constellation private by design.',
+      'Telegram is now also the control surface for serious operations: background AI Worker missions, weekly full-system updates, multi-agent build runs, and health reports all come back through the same simple chat.',
+      'It remains the single public doorway into the system. Everything else stays on private hardware, private mesh networking, or carefully controlled cloud APIs.',
     ],
   },
   {
@@ -57,11 +60,12 @@ export const NODES: MapNode[] = [
     r: 56,
     accent: 'cyan',
     icon: 'hub',
-    facts: ['Always on, 24/7', 'Canonical hub', 'Plans, routes, remembers', 'Future home for clinical helpers'],
+    facts: ['Always on, 24/7', 'Canonical hub', 'Plans, routes, remembers', 'Coordinates weekly estate health'],
     body: [
       'Magnus is the heart of the operation — an always-on Mac mini that never sleeps. When a message arrives, Magnus reads it, makes a plan, and decides who or what should handle it.',
       'Think of an air-traffic controller crossed with a chief of staff: Magnus rarely does everything personally, but everything passes through Magnus, and Magnus keeps the canonical record of what happened.',
-      'Surgeons’ Assistant and Aegis are shown here with Magnus as their intended future home, ready for a real migration from Nestor next Monday.',
+      'Recent infrastructure upgrades made Magnus more operationally mature: scheduled full-system updates, cross-machine parity checks, gateway restarts, Home Assistant verification, and rollback-ready operator reports.',
+      'Surgeons’ Assistant and Aegis are shown here with Magnus as their intended future home: clinical and wellbeing specialists connected to the always-on hub.',
     ],
   },
   {
@@ -73,10 +77,11 @@ export const NODES: MapNode[] = [
     r: 44,
     accent: 'green',
     icon: 'worker',
-    facts: ['Second Mac mini', 'Joined via Tailscale tunnel', 'Takes the heavy lifting'],
+    facts: ['Second Mac mini', 'Joined via Tailscale tunnel', 'Takes heavy lanes', 'Mirrors verified Hermes updates'],
     body: [
       'Apollo is a second Mac mini that lives on the same private network, reached through a secure Tailscale tunnel — a glowing private wire that only these machines can use.',
       'When Magnus has long or heavy work — big research jobs, code builds, batch tasks — Apollo takes it on so the hub stays fast and responsive.',
+      'It now participates in the same safe update pipeline as the hub: backup first, promote only verified commits, then prove the gateway is alive.',
     ],
   },
   {
@@ -88,10 +93,11 @@ export const NODES: MapNode[] = [
     r: 44,
     accent: 'amber',
     icon: 'laptop',
-    facts: ['Lives on the MacBook', 'Online when mobile', 'Big-picture thinking'],
+    facts: ['Lives on the MacBook', 'Online when mobile', 'Big-picture thinking', 'Nestor gateway verified'],
     body: [
       'Nestor rides along on the MacBook, so it appears in the constellation whenever Benjamin is out and about with the laptop open.',
       'Where Magnus coordinates, Nestor commands: it is the strategic voice for planning, reviewing, and steering bigger projects — and it hands work back to Magnus when the lid closes.',
+      'The laptop is now treated as a first-class Hermes node: updated over the private mesh, gateway-checked, and connected to Home Assistant through the same MagicDNS route.',
     ],
   },
   {
@@ -103,7 +109,7 @@ export const NODES: MapNode[] = [
     r: 42,
     accent: 'rose',
     icon: 'vault',
-    facts: ['Notes & long-term memory', 'Real Obsidian graph screenshot', 'Readable by every agent'],
+    facts: ['Notes & long-term memory', 'Sanitized graph preview', 'Readable by every agent'],
     body: [
       'The Obsidian vault is the library of the constellation — a garden of interlinked notes where ideas, decisions, and context are planted and tended.',
       'Agents read it to remember what matters and write back what they learn, so the system gets more personal and more useful the longer it runs.',
@@ -118,10 +124,11 @@ export const NODES: MapNode[] = [
     r: 42,
     accent: 'amber',
     icon: 'house',
-    facts: ['Lights, sensors, scenes', 'Private network only', 'Asks before acting'],
+    facts: ['Lights, sensors, scenes', 'Tailscale / MagicDNS', 'Verified from agents'],
     body: [
       'Home Assistant is the bridge between the digital constellation and the physical house — lights, sensors, heating, scenes.',
       'It is reachable only over the private network, never the open internet, so "turn the studio lights warm" travels safely from a Telegram message to an actual bulb.',
+      'The estate update now checks Home Assistant as part of system health, preferring the private MagicDNS route instead of brittle local hostnames.',
     ],
   },
   {
@@ -142,17 +149,52 @@ export const NODES: MapNode[] = [
   {
     id: 'boris',
     name: 'Boris',
-    role: 'Standby specialist · The builder',
+    role: 'Accountable builder · software engineer',
     x: 0,
     y: 0,
     r: 20,
     accent: 'green',
     icon: 'wrench',
     satellite: true,
-    facts: ['On standby aboard Magnus', 'Blunt, practical, fast', 'Summoned for hands-on builds'],
+    facts: ['On standby aboard Magnus', 'Owns hands-on builds', 'AI Worker + OrcaForge', 'Verifies before shipping'],
     body: [
-      'Boris is a specialist profile that sleeps aboard the hub until summoned. No small talk — Boris exists to build, fix, and ship.',
-      'When a task is pure engineering, Magnus wakes Boris, hands over the brief, and gets out of the way.',
+      'Boris is the accountable builder: the practical AI software engineer Magnus wakes when something needs to be designed, fixed, tested, or shipped.',
+      'AI Worker and OrcaForge orbit Boris as build skills rather than separate bosses. Boris decides the engineering plan, delegates scoped work to the right lane, verifies the result, and reports back through Magnus.',
+      'Boris also maintains the operating system itself: weekly estate updates, cron ownership checks, skill/tool/MCP parity audits, and public deployment verification.',
+    ],
+  },
+  {
+    id: 'aiworker',
+    name: 'AI Worker',
+    role: 'Boris skill · background execution',
+    x: 0,
+    y: 0,
+    r: 15,
+    accent: 'green',
+    icon: 'terminal',
+    satellite: true,
+    facts: ['Linked to Boris', 'Runs scoped jobs', 'Mission control layer', 'Reports to the builder'],
+    body: [
+      'AI Worker is Boris’s background workbench: a reusable skill for delegated scripts, checks, builds, data pulls, and repeatable execution loops.',
+      'It gives the system safe parallel hands without losing accountability. AI Worker executes a bounded work order; Boris owns the judgment and the handoff.',
+      'The important shift is visibility: work becomes a mission with a brief, logs, checks, and a result rather than a vague background promise.',
+    ],
+  },
+  {
+    id: 'orcaforge',
+    name: 'OrcaForge',
+    role: 'Boris skill · multi-agent software forge',
+    x: 0,
+    y: 0,
+    r: 15,
+    accent: 'cyan',
+    icon: 'forge',
+    satellite: true,
+    facts: ['Linked to Boris', 'Claude Opus builder lane', 'Codex review', 'Audit trail + deploy gate'],
+    body: [
+      'OrcaForge is Boris’s high-power coding cockpit: mission brief, isolated worktrees, Claude Opus implementation, agent-swarm subtasks, Codex review, and independent Boris verification.',
+      'It is how an idea becomes a working artifact with an audit trail — not just a model claiming it is done.',
+      'Recent launches use it as the disciplined path from Telegram request to local proof, public deployment, live smoke test, and rollback-aware handover.',
     ],
   },
   {
@@ -310,7 +352,7 @@ export const TOOLS: ToolCard[] = [
   { name: 'Terminal', blurb: 'Speaks directly to the computers in their own language.', icon: 'terminal' },
   { name: 'GitHub', blurb: 'Keeps code projects versioned, reviewed, and shipped.', icon: 'branch' },
   { name: 'Home Assistant', blurb: 'Touches the physical world: lights, heat, scenes.', icon: 'house' },
-  { name: 'Scheduler', blurb: 'Sets alarms for itself — routines that run on time, every time.', icon: 'clock' },
+  { name: 'Scheduler', blurb: 'Runs routines on time, with cron ownership so jobs do not duplicate across agents.', icon: 'clock' },
   { name: 'Messages', blurb: 'Sends results and check-ins back through Telegram.', icon: 'chat' },
 ]
 
@@ -319,12 +361,68 @@ export interface SkillCard {
   blurb: string
 }
 
+export interface UpgradeCard {
+  name: string
+  eyebrow: string
+  blurb: string
+  proof: string
+  accent: Accent
+}
+
+export const UPGRADES: UpgradeCard[] = [
+  {
+    name: 'Weekly full-system update',
+    eyebrow: 'Estate maintenance',
+    blurb: 'A scheduled overnight process keeps the Hermes estate current: backup, preserve local upgrades, promote verified commits, migrate config, restart gateways, and report rollback paths.',
+    proof: 'i7, Apollo, Nestor and Home Assistant checked as one operating estate',
+    accent: 'cyan',
+  },
+  {
+    name: 'AI Worker mission control',
+    eyebrow: 'Background execution',
+    blurb: 'Long-running work becomes a visible mission instead of disappearing into the background: brief, logs, status, and a final result Boris can verify.',
+    proof: 'Scoped worker lanes with auditable handoff',
+    accent: 'green',
+  },
+  {
+    name: 'OrcaForge build cockpit',
+    eyebrow: 'Multi-agent engineering',
+    blurb: 'Serious builds now move through a disciplined forge: mission brief, isolated worktrees, Claude implementation, Codex review, browser smoke tests, and Boris sign-off.',
+    proof: 'From Telegram request to deployed public app with evidence',
+    accent: 'amber',
+  },
+  {
+    name: 'Cross-machine parity audit',
+    eyebrow: 'Drift control',
+    blurb: 'Skills, toolsets, MCPs, providers, cron jobs, platform adapters, and key commands are compared across machines so useful upgrades do not stay trapped on one node.',
+    proof: 'Cron jobs are audited as single-owner resources to avoid duplicates',
+    accent: 'rose',
+  },
+  {
+    name: 'Home Assistant on the private mesh',
+    eyebrow: 'Physical-world bridge',
+    blurb: 'Home Assistant is now treated as a first-class endpoint: checked over Tailscale/MagicDNS from relevant agents and corrected when brittle local names fail.',
+    proof: 'Private route verified before the agents rely on it',
+    accent: 'ice',
+  },
+  {
+    name: 'New specialist agents',
+    eyebrow: 'Expanding crew',
+    blurb: 'The constellation now has clearer roles for Boris, Nestor, Apollo, Sterling, The Professor, Aegis, and Surgeon’s Assistant — each with explicit accountability and safe boundaries.',
+    proof: 'More agents, clearer handoffs, less chaos',
+    accent: 'green',
+  },
+]
+
 export const SKILLS: SkillCard[] = [
   { name: 'Morning Briefing', blurb: 'Weather, calendar, and overnight news, distilled before breakfast.' },
   { name: 'Deep Research', blurb: 'Fan out across many sources, cross-check, return one trustworthy answer.' },
   { name: 'Vault Gardening', blurb: 'Tidy, link, and grow the Obsidian knowledge garden.' },
   { name: 'Home Routines', blurb: 'Orchestrate lights, heating, and scenes around real life.' },
   { name: 'Build & Ship', blurb: 'Take a software idea from sketch to working, tested code.' },
+  { name: 'Full System Update', blurb: 'Weekly overnight estate maintenance: backups, safe updates, gateway restarts, parity audits, and rollback notes.' },
+  { name: 'AI Worker', blurb: 'Boris’s background workbench for scoped scripts, checks, builds, and repeatable execution loops.' },
+  { name: 'OrcaForge', blurb: 'Boris’s multi-agent software forge: worktrees, Claude implementation, Codex review, and verified handoff.' },
   { name: 'Inbox Triage', blurb: 'Sort the important from the ignorable and draft the replies.' },
   { name: 'Watchkeeper', blurb: 'Monitor pages and feeds; speak up only when something truly changes.' },
   { name: 'Trip Planner', blurb: 'Turn "somewhere nice this weekend?" into a full itinerary.' },
@@ -338,11 +436,11 @@ export interface ModelCartridge {
 }
 
 export const MODELS: ModelCartridge[] = [
-  { name: 'Fable 5', maker: 'Anthropic', vibe: 'The flagship mind — deepest reasoning', accent: 'cyan' },
-  { name: 'Opus', maker: 'Anthropic', vibe: 'Heavyweight thinker for hard problems', accent: 'amber' },
+  { name: 'Opus 4.8', maker: 'Anthropic', vibe: 'Primary coding builder in Claude Code', accent: 'cyan' },
+  { name: 'GPT-5.5 / Codex', maker: 'OpenAI', vibe: 'Adversarial code review and repair', accent: 'rose' },
   { name: 'Sonnet', maker: 'Anthropic', vibe: 'The everyday workhorse', accent: 'green' },
-  { name: 'Haiku', maker: 'Anthropic', vibe: 'Featherweight and lightning-fast', accent: 'ice' },
-  { name: 'Codex / GPT', maker: 'OpenAI', vibe: 'A second opinion from another lab', accent: 'rose' },
+  { name: 'Grok', maker: 'xAI', vibe: 'Fast spikes, current docs, alternate takes', accent: 'amber' },
+  { name: 'OpenRouter', maker: 'Model mesh', vibe: 'Model-agnostic routing and Fusion plans', accent: 'ice' },
 ]
 
 export interface Persona {
@@ -367,7 +465,7 @@ export const PERSONAS: Persona[] = [
     accent: 'cyan',
     icon: 'hub',
     description:
-      'The calm centre of the constellation. Reads every request, makes the plan, picks the right helper, and keeps the canonical record. Lives on the always-on Mac mini.',
+      'The calm centre of the constellation. Reads every request, makes the plan, picks the right helper, keeps the canonical record, and now oversees weekly estate health. Lives on the always-on Mac mini.',
     traits: ['Organised', 'Reliable', 'Sees the whole board'],
   },
   {
@@ -379,7 +477,7 @@ export const PERSONAS: Persona[] = [
     accent: 'amber',
     icon: 'laptop',
     description:
-      'The big-picture commander who travels with the MacBook. Steers long projects, reviews plans, and challenges assumptions — then hands the baton back to Magnus.',
+      'The big-picture commander who travels with the MacBook. Steers long projects, reviews plans, challenges assumptions, and now runs as a verified Hermes node on the same private mesh.',
     traits: ['Strategic', 'Decisive', 'Travels light'],
   },
   {
@@ -391,8 +489,8 @@ export const PERSONAS: Persona[] = [
     accent: 'green',
     icon: 'worker',
     description:
-      'The tireless second pair of hands on its own Mac mini. Takes the long, heavy jobs — big research, builds, batch work — so the hub never slows down.',
-    traits: ['Tireless', 'Heavy lifting', 'Quietly competent'],
+      'The tireless second pair of hands on its own Mac mini. Takes long, heavy jobs — big research, builds, batch work, and remote agent lanes — while staying aligned to the same verified Hermes commit set.',
+    traits: ['Tireless', 'Heavy lifting', 'Parallel lanes'],
   },
   {
     id: 'boris',
@@ -403,8 +501,8 @@ export const PERSONAS: Persona[] = [
     accent: 'green',
     icon: 'wrench',
     description:
-      'Blunt, practical, allergic to waffle. Summoned when something needs to be built, fixed, or shipped — and dismissed the moment it works.',
-    traits: ['No-nonsense', 'Hands-on', 'Ships it'],
+      'Blunt, practical, allergic to waffle. Summoned when something needs to be built, fixed, shipped, or operationally hardened; can invoke AI Worker and OrcaForge but remains accountable for the result.',
+    traits: ['No-nonsense', 'Hands-on', 'Verified shipping'],
   },
   {
     id: 'sterling',
@@ -463,7 +561,7 @@ export const PERSONAS: Persona[] = [
     accent: 'amber',
     icon: 'plus',
     description:
-      'The constellation is built to grow. New machines and new specialist personas can join the network at any time — each one just another star switched on.',
+      'The constellation is built to grow. New machines, specialists, MCP servers, and skills can join — but the parity audit keeps growth deliberate rather than chaotic.',
     traits: ['Expandable', 'Plug-in', 'Coming soon'],
   },
 ]
@@ -494,21 +592,21 @@ export const JOURNEY: JourneyStep[] = [
   {
     num: '03',
     title: 'The right mind is chosen',
-    text: 'A model is slotted in like an engine cartridge — Fable for deep thought, a fast model for quick jobs — and, if needed, a specialist persona is woken.',
+    text: 'A model is slotted in like an engine cartridge: Claude for long coding runs, GPT/Codex for adversarial review, Grok for fast spikes, or OpenRouter for model-agnostic routing.',
     icon: 'cartridge',
     accent: 'amber',
   },
   {
     num: '04',
-    title: 'Hands get to work',
-    text: 'Skills (reusable playbooks) and tools (web, files, terminal, browser, GitHub) carry out the plan. Heavy jobs hop to Apollo over the secure tunnel.',
+    title: 'Boris can forge the build',
+    text: 'For engineering, Magnus wakes Boris. Boris can invoke AI Worker for bounded background jobs or OrcaForge for the full Claude-build, Codex-review, verified-deploy pipeline.',
     icon: 'wrench',
     accent: 'green',
   },
   {
     num: '05',
     title: 'Memory and home join in',
-    text: 'The Obsidian vault supplies what the constellation already knows; Home Assistant handles anything physical, safely inside the private network.',
+    text: 'Work can spread across the three-computer mesh: Magnus coordinates, Apollo takes heavy lanes, Nestor steers strategy, Obsidian supplies context, and Home Assistant is checked over Tailscale before agents rely on it.',
     icon: 'vault',
     accent: 'rose',
   },
