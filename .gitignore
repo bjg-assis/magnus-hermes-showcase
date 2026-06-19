@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Local env / secrets (keep the example tracked)
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -23,3 +28,4 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+.portal-session-secret

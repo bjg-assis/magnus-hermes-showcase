@@ -1,0 +1,419 @@
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { Icon } from './components/Icon'
+
+type PatientListItem = {
+  id: number
+  firstName: string
+  lastName: string
+  dob: string | null
+  status: string
+  phone: string | null
+}
+
+type TimelineEvent = {
+  date: string | null
+  kind: string
+  title: string
+  detail?: string
+}
+
+type PatientDetail = {
+  patient: {
+    id: number
+    firstName: string
+    lastName: string
+    dob: string | null
+    sex: string | null
+    status: string
+    allergies: string | null
+    medicalHistory: string | null
+  }
+  contacts: Array<{ id: number; kind: string; value: string; label: string | null; isPrimary: boolean }>
+  treatments: Array<{ id: number; procedureType: string; performedAt: string | null; clinician: string | null; summary: string | null }>
+  followUps: Array<{ id: number; dueDate: string | null; status: string; reason: string | null }>
+  appointments: Array<{ id: number; scheduledFor: string; status: string; kind: string | null }>
+  timeline: TimelineEvent[]
+}
+
+type ThalloSection = 'menu' | 'patients' | 'org' | 'rulebook'
+
+const departments = [
+  {
+    name: 'Marketing',
+    lead: 'Marketing Director Agent',
+    mission: 'Create demand, build trust, improve public presence and campaign quality.',
+    workers: ['Website & SEO Agent', 'Content Agent', 'Campaign Planner Agent'],
+  },
+  {
+    name: 'Customer Acquisition',
+    lead: 'Head of Customer Acquisition Agent',
+    mission: 'Turn appropriate interest into booked consultations and treatments.',
+    workers: ['Lead Capture Agent', 'Referral Agent', 'Enquiry Follow-up Agent'],
+  },
+  {
+    name: 'Customer Retention & Value Maximisation',
+    lead: 'Client Success Director Agent',
+    mission: 'Increase repeat business, lifetime value, referrals, and review opportunities.',
+    workers: ['Client Success & Recall Agent', 'Reactivation Agent', 'Review/Reputation Agent'],
+  },
+  {
+    name: 'Finance',
+    lead: 'Finance Director Agent',
+    mission: 'Protect and improve profit, cash visibility, payments, expenses, and tax readiness.',
+    workers: ['Payments Agent', 'Bookkeeping Agent', 'Tax Planning Agent', 'Profitability Analyst Agent'],
+  },
+  {
+    name: 'Product & Services',
+    lead: 'Product & Services Director Agent',
+    mission: 'Decide what Thallo should offer and optimise margin, time, scalability, and risk.',
+    workers: ['Service Profitability Agent', 'Pricing Agent', 'Treatment Pathway Agent', 'New Product Research Agent'],
+  },
+  {
+    name: 'Legal, Risk & Compliance',
+    lead: 'Legal, Risk & Compliance Director Agent',
+    mission: 'Keep Thallo safe, compliant, insurable, and professionally defensible.',
+    workers: ['Clinical Governance Agent', 'Advertising Compliance Agent', 'GDPR/Data Protection Agent', 'Red-Team Risk Agent'],
+  },
+  {
+    name: 'Operations',
+    lead: 'Operations Manager Agent',
+    mission: 'Keep the practice running smoothly day to day.',
+    workers: ['Scheduling Agent', 'Stock Agent', 'Clinic Prep Agent'],
+  },
+  {
+    name: 'Digital/Product Engineering',
+    lead: 'Digital Product Lead Agent',
+    mission: 'Improve the Thallo dashboard, data quality, reporting, and safe automation tooling.',
+    workers: ['Dashboard/Product Agent', 'Data Quality Agent', 'Reporting Agent'],
+  },
+  {
+    name: 'Strategy & Performance',
+    lead: 'Strategy Director / Board Advisor Agent',
+    mission: 'Help Jeff think like a CEO through KPI review, strategy, market intelligence, and challenge.',
+    workers: ['KPI Analyst Agent', 'Competitor Intelligence Agent', 'Strategic Board Agent'],
+  },
+]
+
+function formatDate(value: string | null | undefined) {
+  if (!value) return '—'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(date)
+}
+
+async function fetchJson<T>(url: string): Promise<T> {
+  const res = await fetch(url, { cache: 'no-store' })
+  const data = await res.json().catch(() => null)
+  if (!res.ok) {
+    const message = data?.error === 'thallo_proxy_not_configured'
+      ? 'Thallo proxy is not configured yet.'
+      : data?.error === 'not_authenticated'
+        ? 'Please sign in again.'
+        : 'Could not load Thallo data.'
+    throw new Error(message)
+  }
+  return data as T
+}
+
+function PatientDashboard() {
+  const [query, setQuery] = useState('')
+  const [patients, setPatients] = useState<PatientListItem[]>([])
+  const [selectedId, setSelectedId] = useState<number | null>(null)
+  const [detail, setDetail] = useState<PatientDetail | null>(null)
+  const [loadingList, setLoadingList] = useState(true)
+  const [loadingDetail, setLoadingDetail] = useState(false)
+  const [error, setError] = useState('')
+  const detailRequestId = useRef(0)
+
+  const selectedPatientName = useMemo(() => {
+    const patient = patients.find((p) => p.id === selectedId)
+    return patient ? `${patient.firstName} ${patient.lastName}` : 'Patient detail'
+  }, [patients, selectedId])
+
+  const loadPatients = async (q = query) => {
+    setLoadingList(true)
+    setError('')
+    try {
+      const qs = q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''
+      const data = await fetchJson<{ patients: PatientListItem[] }>(`/api/thallo/patients${qs}`)
+      setPatients(data.patients)
+      if (selectedId && !data.patients.some((p) => p.id === selectedId)) {
+        setSelectedId(null)
+        setDetail(null)
+      }
+    } catch (e) {
+      setPatients([])
+      setDetail(null)
+      setSelectedId(null)
+      setError(e instanceof Error ? e.message : 'Could not load Thallo data.')
+    } finally {
+      setLoadingList(false)
+    }
+  }
+
+  const loadDetail = async (id: number) => {
+    const requestId = detailRequestId.current + 1
+    detailRequestId.current = requestId
+    setSelectedId(id)
+    setLoadingDetail(true)
+    setError('')
+    try {
+      const data = await fetchJson<PatientDetail>(`/api/thallo/patient?id=${id}`)
+      if (detailRequestId.current === requestId) setDetail(data)
+    } catch (e) {
+      if (detailRequestId.current === requestId) {
+        setDetail(null)
+        setError(e instanceof Error ? e.message : 'Could not load patient detail.')
+      }
+    } finally {
+      if (detailRequestId.current === requestId) setLoadingDetail(false)
+    }
+  }
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadPatients('')
+  }, [])
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault()
+    void loadPatients(query)
+  }
+
+  return (
+    <section className="thallo-data-shell" aria-label="Thallo patient database">
+      <aside className="thallo-patient-list">
+        <form className="thallo-search" onSubmit={submit}>
+          <input
+            className="portal-input"
+            type="search"
+            placeholder="Search patients…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search patients"
+          />
+          <button type="submit" className="portal-submit compact" disabled={loadingList}>
+            {loadingList ? 'Loading…' : 'Search'}
+          </button>
+        </form>
+
+        {error && <p className="portal-error data-error">{error}</p>}
+
+        <div className="thallo-list-scroll">
+          {loadingList ? (
+            <p className="thallo-empty">Loading patients…</p>
+          ) : patients.length === 0 ? (
+            <p className="thallo-empty">No patients available.</p>
+          ) : (
+            patients.map((patient) => (
+              <button
+                key={patient.id}
+                type="button"
+                className={`thallo-patient-row ${patient.id === selectedId ? 'selected' : ''}`}
+                onClick={() => void loadDetail(patient.id)}
+              >
+                <span className="thallo-patient-name">{patient.lastName}, {patient.firstName}</span>
+                <span className="thallo-patient-meta">DOB {formatDate(patient.dob)} · {patient.status}</span>
+              </button>
+            ))
+          )}
+        </div>
+      </aside>
+
+      <section className="thallo-detail-panel" aria-live="polite">
+        {loadingDetail ? (
+          <p className="thallo-empty">Loading {selectedPatientName}…</p>
+        ) : !detail ? (
+          <div className="thallo-detail-empty">
+            <Icon name="shield" size={34} />
+            <h2>Select a patient</h2>
+            <p>Open a record from the list to view read-only demographics, contacts, clinical summary, and timeline.</p>
+          </div>
+        ) : (
+          <article className="thallo-record">
+            <header className="thallo-record-head">
+              <div>
+                <p className="portal-kicker">Read-only record</p>
+                <h2>{detail.patient.firstName} {detail.patient.lastName}</h2>
+                <p>DOB {formatDate(detail.patient.dob)} · {detail.patient.sex ?? 'sex not recorded'} · {detail.patient.status}</p>
+              </div>
+            </header>
+
+            <div className="thallo-record-grid">
+              <section className="portal-info-card wide">
+                <h4>Contacts</h4>
+                {detail.contacts.length === 0 ? <p>None recorded.</p> : detail.contacts.map((contact) => (
+                  <p key={contact.id}><strong>{contact.kind}</strong>: {contact.value}</p>
+                ))}
+              </section>
+
+              <section className="portal-info-card wide">
+                <h4>Clinical</h4>
+                <p><strong>Allergies:</strong> {detail.patient.allergies || '—'}</p>
+                <p><strong>History:</strong> {detail.patient.medicalHistory || '—'}</p>
+              </section>
+
+              <section className="portal-info-card wide">
+                <h4>Treatments</h4>
+                {detail.treatments.length === 0 ? <p>None recorded.</p> : detail.treatments.slice(0, 8).map((item) => (
+                  <p key={item.id}>{formatDate(item.performedAt)} · {item.summary || item.procedureType}</p>
+                ))}
+              </section>
+
+              <section className="portal-info-card wide">
+                <h4>Follow-ups</h4>
+                {detail.followUps.length === 0 ? <p>None recorded.</p> : detail.followUps.slice(0, 8).map((item) => (
+                  <p key={item.id}>{formatDate(item.dueDate)} · {item.reason || 'Review'} · {item.status}</p>
+                ))}
+              </section>
+            </div>
+
+            <section className="portal-info-card timeline-card">
+              <h4>Timeline</h4>
+              {detail.timeline.length === 0 ? <p>No events recorded.</p> : detail.timeline.slice(0, 12).map((event, index) => (
+                <p key={`${event.kind}-${index}`}><strong>{event.kind.replace('_', ' ')}</strong> · {formatDate(event.date)} · {event.title}</p>
+              ))}
+            </section>
+          </article>
+        )}
+      </section>
+    </section>
+  )
+}
+
+function OrganisationChart() {
+  return (
+    <section className="thallo-org-shell" aria-label="Thallo organisation chart">
+      <div className="thallo-ceo-card">
+        <p className="portal-kicker">Reports directly to Benjamin</p>
+        <h2>Jeff — Thallo CEO</h2>
+        <p>
+          Jeff owns company value, profitability, targets, department cadence, rule-book stewardship,
+          approval governance, and weekly/monthly/quarterly reports.
+        </p>
+      </div>
+      <div className="thallo-department-grid">
+        {departments.map((department) => (
+          <article className="thallo-department-card" key={department.name}>
+            <p className="portal-kicker">Department</p>
+            <h3>{department.name}</h3>
+            <p><strong>Lead:</strong> {department.lead}</p>
+            <p>{department.mission}</p>
+            <ul>
+              {department.workers.map((worker) => <li key={worker}>{worker}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function RuleBook() {
+  const [text, setText] = useState('Loading rule book…')
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/thallo/organisation-rulebook.md', { cache: 'no-store' })
+      .then((res) => {
+        if (!res.ok) throw new Error('Could not load rule book.')
+        return res.text()
+      })
+      .then(setText)
+      .catch((e) => setError(e instanceof Error ? e.message : 'Could not load rule book.'))
+  }, [])
+
+  return (
+    <section className="thallo-rulebook-shell" aria-label="Thallo organisation rule book">
+      <div className="portal-info-card wide thallo-rulebook-note">
+        <h3>Organisation Rule Book</h3>
+        <p>
+          Canonical operating document for the Thallo AI company. All agents may read it;
+          only Jeff — Thallo CEO may modify it after Benjamin approval.
+        </p>
+        <p className="thallo-rulebook-source">Source: /thallo/organisation-rulebook.md · cache bypassed on each open</p>
+      </div>
+      {error ? <p className="portal-error">{error}</p> : <pre className="thallo-rulebook-text">{text}</pre>}
+    </section>
+  )
+}
+
+function ThalloMenu({ onSelect }: { onSelect: (section: ThalloSection) => void }) {
+  return (
+    <section className="thallo-workspace-menu" aria-label="Thallo workspace choices">
+      <button type="button" className="portal-choice portal-thallo" onClick={() => onSelect('patients')}>
+        <span className="portal-choice-icon"><Icon name="shield" size={26} /></span>
+        <h2>Patient dashboard</h2>
+        <p>Open the existing secured, read-only Thallo patient database workspace.</p>
+        <span className="portal-choice-go">Open dashboard →</span>
+      </button>
+      <button type="button" className="portal-choice portal-thallo" onClick={() => onSelect('org')}>
+        <span className="portal-choice-icon"><Icon name="hub" size={26} /></span>
+        <h2>Organisation chart</h2>
+        <p>View Jeff, departments, department leads, and worker agents.</p>
+        <span className="portal-choice-go">View org chart →</span>
+      </button>
+      <button type="button" className="portal-choice portal-thallo" onClick={() => onSelect('rulebook')}>
+        <span className="portal-choice-icon"><Icon name="doc" size={26} /></span>
+        <h2>Organisation rule book</h2>
+        <p>Read the canonical company operating rules; shared-read, Jeff-only-edit.</p>
+        <span className="portal-choice-go">Read rule book →</span>
+      </button>
+    </section>
+  )
+}
+
+export function Thallo({ onBack, onLock }: { onBack: () => void; onLock: () => void }) {
+  const [section, setSection] = useState<ThalloSection>('menu')
+
+  const sectionTitle = {
+    menu: 'Thallo workspace',
+    patients: 'Thallo patients',
+    org: 'Thallo organisation chart',
+    rulebook: 'Thallo organisation rule book',
+  }[section]
+
+  return (
+    <div className="portal-screen portal-thallo">
+      <header className="portal-bar">
+        <span className="portal-brand">
+          <span className="portal-mark">
+            <Icon name="shield" size={16} />
+          </span>
+          Thallo
+        </span>
+        <div className="portal-bar-actions">
+          {section !== 'menu' && (
+            <button type="button" className="portal-link-btn" onClick={() => setSection('menu')}>
+              ‹ Thallo menu
+            </button>
+          )}
+          <button type="button" className="portal-link-btn" onClick={onBack}>
+            ‹ Launcher
+          </button>
+          <button type="button" className="portal-link-btn" onClick={onLock}>
+            Lock
+          </button>
+        </div>
+      </header>
+
+      <main className="portal-thallo-main data-mode">
+        <div className="portal-thallo-hero compact">
+          <p className="portal-kicker">Clinical workspace · private company OS</p>
+          <h1>{sectionTitle}</h1>
+        </div>
+
+        {section === 'menu' && <ThalloMenu onSelect={setSection} />}
+        {section === 'patients' && <PatientDashboard />}
+        {section === 'org' && <OrganisationChart />}
+        {section === 'rulebook' && <RuleBook />}
+      </main>
+
+      <footer className="portal-foot">
+        <p>Thallo · private workspace</p>
+      </footer>
+    </div>
+  )
+}

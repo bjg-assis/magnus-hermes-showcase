@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "check:rulebook": "node scripts/check-thallo-rulebook-freshness.mjs",
+    "build": "npm run check:rulebook && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

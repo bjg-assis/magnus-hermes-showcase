@@ -1,0 +1,767 @@
+/* ============ portal: auth gate · launcher · thallo ============
+   Reuses the Magnus design tokens from index.css so the gated flow
+   matches the showcase. Authentication and Thallo data access run through
+   server-side API routes; patient rows are never bundled into the client. */
+
+.portal-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px) 40px;
+}
+
+/* --- top bar (launcher & thallo) --- */
+.portal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 56px;
+  margin: 0 calc(-1 * clamp(16px, 4vw, 48px));
+  padding: 0 clamp(16px, 4vw, 48px);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.portal-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.portal-mark {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--blue);
+  background: rgba(0, 113, 227, 0.08);
+}
+
+.portal-bar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.portal-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--panel);
+  border: none;
+  border-radius: 980px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.portal-link-btn:hover {
+  color: var(--text);
+  background: #ececf0;
+}
+
+/* --- auth / login --- */
+.portal-auth {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: clamp(24px, 6vh, 80px) 20px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(0, 113, 227, 0.14), transparent 34%),
+    radial-gradient(circle at 92% 8%, rgba(48, 209, 88, 0.10), transparent 28%),
+    linear-gradient(160deg, #f8fbff 0%, #eff6ff 45%, #fbfbfd 100%);
+}
+
+.portal-auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: clamp(28px, 5vw, 40px);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 26px;
+  box-shadow: var(--shadow-lift);
+}
+
+.portal-lock-mark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  color: var(--blue);
+  background: rgba(0, 113, 227, 0.10);
+  border: 1px solid rgba(0, 113, 227, 0.20);
+}
+
+.portal-kicker {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--blue-deep);
+  margin-bottom: 8px;
+}
+
+.portal-auth-card h1 {
+  font-size: clamp(24px, 4vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.portal-auth-sub {
+  margin-bottom: 22px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.portal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.portal-input {
+  width: 100%;
+  padding: 13px 16px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.portal-input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.14);
+}
+
+.portal-submit {
+  margin-top: 4px;
+  padding: 13px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--blue);
+  border: none;
+  border-radius: 980px;
+  transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.portal-submit:hover {
+  background: #0077ed;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.3);
+}
+
+.portal-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+.portal-submit.compact {
+  margin-top: 0;
+  padding: 11px 18px;
+  font-size: 14px;
+}
+
+.portal-error {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--accent-orange);
+}
+
+.portal-demo-note {
+  margin-top: 4px;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #7a4b00;
+  background: rgba(201, 128, 0, 0.10);
+  border: 1px solid rgba(201, 128, 0, 0.22);
+  border-radius: 12px;
+}
+
+.portal-fineprint {
+  margin-top: 18px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--text-tertiary);
+}
+
+/* --- launcher --- */
+.portal-launcher-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(40px, 8vh, 96px) 0;
+}
+
+.portal-launcher-main h1 {
+  font-size: clamp(34px, 6vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.portal-launcher-sub {
+  max-width: 540px;
+  margin: 14px auto 0;
+  font-size: clamp(16px, 2.2vw, 20px);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.portal-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+  max-width: 720px;
+  margin: 44px auto 0;
+}
+
+.portal-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px 26px;
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.portal-choice:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--hairline));
+}
+
+.portal-choice-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 14px;
+  border-radius: 15px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.portal-choice h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.portal-choice p {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.portal-choice-go {
+  margin-top: auto;
+  padding-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.portal-magnus {
+  --accent: var(--blue);
+}
+
+.portal-thallo {
+  --accent: var(--accent-green);
+}
+
+/* --- thallo landing --- */
+.portal-thallo-main {
+  flex: 1;
+  padding: clamp(40px, 7vh, 80px) 0 0;
+}
+
+.portal-thallo-hero {
+  max-width: 680px;
+}
+
+.portal-thallo-hero h1 {
+  margin-top: 6px;
+  font-size: clamp(36px, 7vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.portal-thallo-hero p {
+  margin-top: 14px;
+  font-size: clamp(16px, 2.2vw, 20px);
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.portal-phi-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: 720px;
+  margin: 32px 0 0;
+  padding: 22px 24px;
+  background: #fff;
+  border: 1px solid rgba(36, 138, 61, 0.22);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.portal-phi-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: var(--accent-green);
+  background: rgba(36, 138, 61, 0.08);
+}
+
+.portal-phi-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.portal-phi-card p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.portal-handoff {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 28px 0 0;
+}
+
+.portal-handoff-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 26px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent-green);
+  border: none;
+  border-radius: 980px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.portal-handoff-btn:hover {
+  background: #1f7836;
+  box-shadow: 0 4px 16px rgba(36, 138, 61, 0.3);
+  text-decoration: none;
+}
+
+.portal-handoff-btn.disabled {
+  color: var(--text-tertiary);
+  background: var(--panel);
+  cursor: default;
+  pointer-events: none;
+}
+
+.portal-handoff-note {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.portal-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 44px 0 0;
+}
+
+.portal-info-card {
+  padding: 20px;
+  background: var(--panel);
+  border-radius: 18px;
+}
+
+.portal-info-card h3,
+.portal-info-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.portal-info-card p {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.portal-foot {
+  margin-top: 64px;
+  padding: 20px 0;
+  border-top: 1px solid var(--hairline);
+  text-align: center;
+}
+
+.portal-foot p {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* --- thallo read-only data viewer --- */
+.portal-thallo-main.data-mode {
+  padding-top: clamp(28px, 5vh, 52px);
+}
+
+.portal-thallo-hero.compact {
+  max-width: 860px;
+  margin: 0 auto 22px;
+  text-align: center;
+}
+
+.portal-thallo-hero.compact p {
+  margin-top: 0;
+}
+
+.thallo-workspace-menu {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1080px;
+  margin: 34px auto 0;
+}
+
+.thallo-data-shell {
+  display: grid;
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  gap: 18px;
+  min-height: 620px;
+}
+
+.thallo-patient-list,
+.thallo-detail-panel {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--hairline);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.thallo-patient-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.thallo-search {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.data-error {
+  margin: 0 16px 12px;
+  padding: 10px 12px;
+  background: rgba(201, 52, 0, 0.08);
+  border-radius: 12px;
+}
+
+.thallo-list-scroll {
+  overflow: auto;
+  padding: 8px;
+}
+
+.thallo-patient-row {
+  display: block;
+  width: 100%;
+  padding: 13px 14px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 15px;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.thallo-patient-row:hover,
+.thallo-patient-row.selected {
+  background: var(--panel);
+}
+
+.thallo-patient-row.selected {
+  box-shadow: inset 3px 0 0 var(--blue);
+}
+
+.thallo-patient-name,
+.thallo-patient-meta {
+  display: block;
+}
+
+.thallo-patient-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.thallo-patient-meta {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.thallo-empty,
+.thallo-detail-empty {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.thallo-empty {
+  padding: 20px 14px;
+}
+
+.thallo-detail-panel {
+  min-width: 0;
+  padding: clamp(18px, 3vw, 28px);
+  overflow: auto;
+}
+
+.thallo-detail-empty {
+  display: grid;
+  min-height: 460px;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.thallo-detail-empty svg {
+  color: var(--blue);
+}
+
+.thallo-detail-empty h2,
+.thallo-record-head h2 {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.thallo-record-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.thallo-record-head p:not(.portal-kicker) {
+  margin-top: 6px;
+  color: var(--text-secondary);
+}
+
+.thallo-record-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.portal-info-card.wide,
+.timeline-card {
+  background: #fff;
+  border: 1px solid var(--hairline);
+}
+
+.portal-info-card.wide p,
+.timeline-card p {
+  margin-top: 7px;
+}
+
+.timeline-card {
+  margin-top: 14px;
+}
+
+/* --- thallo organisation/rulebook --- */
+.thallo-org-shell,
+.thallo-rulebook-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.thallo-ceo-card {
+  padding: clamp(24px, 4vw, 34px);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(36, 138, 61, 0.14), transparent 34%),
+    #fff;
+  border: 1px solid rgba(36, 138, 61, 0.22);
+  border-radius: 28px;
+  box-shadow: var(--shadow-card);
+}
+
+.thallo-ceo-card h2 {
+  margin-bottom: 8px;
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: -0.025em;
+}
+
+.thallo-ceo-card p:not(.portal-kicker) {
+  max-width: 820px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.thallo-department-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.thallo-department-card {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--hairline);
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
+}
+
+.thallo-department-card h3 {
+  margin-bottom: 8px;
+  font-size: 19px;
+  line-height: 1.15;
+}
+
+.thallo-department-card p {
+  margin-top: 8px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.thallo-department-card ul {
+  margin: 12px 0 0 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.thallo-department-card li + li {
+  margin-top: 4px;
+}
+
+.thallo-rulebook-note {
+  margin-bottom: 16px;
+}
+
+.thallo-rulebook-source {
+  color: var(--text-tertiary) !important;
+  font-size: 12.5px !important;
+}
+
+.thallo-rulebook-text {
+  overflow: auto;
+  max-height: 68vh;
+  padding: clamp(18px, 3vw, 28px);
+  white-space: pre-wrap;
+  line-height: 1.55;
+  color: #1d1d1f;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--hairline);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 980px) {
+  .thallo-workspace-menu,
+  .thallo-department-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .thallo-data-shell,
+  .thallo-record-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .thallo-data-shell {
+    min-height: auto;
+  }
+}
+
+/* --- magnus dock: return-to-launcher control over the showcase --- */
+.portal-dock {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border: 1px solid var(--hairline);
+  border-radius: 980px;
+  box-shadow: var(--shadow-lift);
+}
+
+.portal-dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  border-radius: 980px;
+  transition: background 0.2s;
+}
+
+.portal-dock-btn:hover {
+  background: var(--panel);
+}
+
+.portal-dock-btn.ghost {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 620px) {
+  .portal-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
