@@ -621,26 +621,146 @@
   margin: 0 auto;
 }
 
-.thallo-ceo-card {
-  padding: clamp(24px, 4vw, 34px);
-  background:
-    radial-gradient(circle at 10% 0%, rgba(36, 138, 61, 0.14), transparent 34%),
-    #fff;
-  border: 1px solid rgba(36, 138, 61, 0.22);
+.thallo-org-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.thallo-org-intro h2 {
+  margin-top: 4px;
+  font-size: clamp(30px, 5vw, 52px);
+  letter-spacing: -0.03em;
+}
+
+.thallo-org-intro p:not(.portal-kicker),
+.thallo-org-legend {
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.thallo-org-legend {
+  padding: 16px 18px;
+  font-size: 13px;
+  background: rgba(36, 138, 61, 0.08);
+  border: 1px solid rgba(36, 138, 61, 0.20);
+  border-radius: 18px;
+}
+
+.thallo-org-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  gap: 18px;
+  align-items: start;
+}
+
+.thallo-org-visual,
+.thallo-org-detail {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--hairline);
   border-radius: 28px;
   box-shadow: var(--shadow-card);
 }
 
-.thallo-ceo-card h2 {
-  margin-bottom: 8px;
-  font-size: clamp(28px, 4vw, 44px);
+.thallo-org-visual {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(20px, 3vw, 28px);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(36, 138, 61, 0.13), transparent 30%),
+    radial-gradient(circle at 18% 86%, rgba(0, 113, 227, 0.08), transparent 26%),
+    #fff;
+}
+
+.thallo-org-tier {
+  display: flex;
+  justify-content: center;
+}
+
+.thallo-owner-node,
+.thallo-ceo-node {
+  display: grid;
+  gap: 4px;
+  width: min(100%, 360px);
+  padding: 18px 22px;
+  text-align: center;
+  border-radius: 22px;
+}
+
+.thallo-owner-node {
+  color: var(--text);
+  background: #f5f5f7;
+  border: 1px solid var(--hairline);
+}
+
+.thallo-ceo-node {
+  color: #fff;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(135deg, #248a3d, #176b2d);
+  border: 1px solid rgba(23, 107, 45, 0.28);
+  box-shadow: 0 14px 34px rgba(36, 138, 61, 0.24);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.thallo-ceo-node:hover,
+.thallo-ceo-node.selected {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(36, 138, 61, 0.30);
+}
+
+.org-node-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.76;
+}
+
+.thallo-owner-node strong,
+.thallo-ceo-node strong {
+  font-size: clamp(25px, 4vw, 36px);
   letter-spacing: -0.025em;
 }
 
-.thallo-ceo-card p:not(.portal-kicker) {
-  max-width: 820px;
-  line-height: 1.5;
-  color: var(--text-secondary);
+.thallo-ceo-node span:last-child {
+  font-size: 13px;
+  opacity: 0.84;
+}
+
+.org-connector.vertical {
+  width: 2px;
+  height: 28px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(36, 138, 61, 0.12), rgba(36, 138, 61, 0.42));
+}
+
+.org-connector.fan {
+  position: relative;
+  height: 36px;
+  margin: 2px 0 8px;
+}
+
+.org-connector.fan::before,
+.org-connector.fan::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 18px;
+  border-top: 1px dashed rgba(36, 138, 61, 0.26);
+}
+
+.org-connector.fan::after {
+  left: 50%;
+  right: auto;
+  width: 1px;
+  height: 20px;
+  top: 0;
+  border-top: 0;
+  border-left: 1px dashed rgba(36, 138, 61, 0.30);
 }
 
 .thallo-department-grid {
@@ -650,35 +770,139 @@
   margin-top: 18px;
 }
 
+.thallo-department-grid.interactive {
+  margin-top: 0;
+}
+
 .thallo-department-card {
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.88);
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--hairline);
   border-radius: 22px;
   box-shadow: var(--shadow-card);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
-.thallo-department-card h3 {
-  margin-bottom: 8px;
-  font-size: 19px;
-  line-height: 1.15;
+.thallo-department-card.selected {
+  border-color: rgba(36, 138, 61, 0.48);
+  box-shadow: 0 12px 32px rgba(36, 138, 61, 0.14);
+  transform: translateY(-2px);
 }
 
-.thallo-department-card p {
-  margin-top: 8px;
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--text-secondary);
+.thallo-department-card.compliance {
+  border-color: rgba(201, 52, 0, 0.22);
 }
 
-.thallo-department-card ul {
-  margin: 12px 0 0 18px;
+.thallo-department-button {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 16px;
+}
+
+.thallo-department-button:hover {
+  background: var(--panel);
+}
+
+.thallo-department-button:focus-visible {
+  background: var(--panel);
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.thallo-department-title {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.12;
+  color: var(--text);
+}
+
+.thallo-department-button span:not(.portal-kicker),
+.thallo-org-detail p,
+.thallo-worker-chip {
   font-size: 13px;
+  line-height: 1.42;
   color: var(--text-secondary);
 }
 
-.thallo-department-card li + li {
-  margin-top: 4px;
+.thallo-worker-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.thallo-worker-chip {
+  padding: 7px 10px;
+  background: #f5f5f7;
+  border: 1px solid transparent;
+  border-radius: 980px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.thallo-worker-chip:hover,
+.thallo-worker-chip.selected {
+  color: var(--accent-green);
+  background: rgba(36, 138, 61, 0.08);
+  border-color: rgba(36, 138, 61, 0.26);
+}
+
+.thallo-org-detail {
+  position: sticky;
+  top: 78px;
+  padding: clamp(20px, 3vw, 26px);
+}
+
+.thallo-org-detail h3 {
+  margin-bottom: 8px;
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.025em;
+}
+
+.thallo-detail-stack,
+.thallo-approval-card,
+.thallo-compliance-note {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--panel);
+  border-radius: 16px;
+}
+
+.thallo-detail-stack p + p {
+  margin-top: 6px;
+}
+
+.thallo-approval-card {
+  border: 1px solid rgba(36, 138, 61, 0.16);
+}
+
+.thallo-approval-card strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.thallo-compliance-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: #8f3500;
+  background: rgba(201, 52, 0, 0.08);
+}
+
+.thallo-compliance-note svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.thallo-compliance-note span {
+  font-size: 13px;
+  line-height: 1.42;
 }
 
 .thallo-rulebook-note {
@@ -707,6 +931,15 @@
   .thallo-workspace-menu,
   .thallo-department-grid {
     grid-template-columns: 1fr;
+  }
+
+  .thallo-org-intro,
+  .thallo-org-board {
+    grid-template-columns: 1fr;
+  }
+
+  .thallo-org-detail {
+    position: static;
   }
 }
 

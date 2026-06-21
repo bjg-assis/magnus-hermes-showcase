@@ -283,29 +283,135 @@ function PatientDashboard() {
   )
 }
 
+type OrgSelection =
+  | { kind: 'ceo' }
+  | { kind: 'department'; index: number }
+  | { kind: 'worker'; index: number; worker: string }
+
 function OrganisationChart() {
+  const [selection, setSelection] = useState<OrgSelection>({ kind: 'ceo' })
+
+  const selectedDepartment = selection.kind === 'ceo' ? null : departments[selection.index]
+  const selectedTitle = selection.kind === 'ceo'
+    ? 'Jeff — Thallo CEO'
+    : selection.kind === 'department'
+      ? selectedDepartment?.name
+      : selection.worker
+  const selectedEyebrow = selection.kind === 'ceo'
+    ? 'Executive layer'
+    : selection.kind === 'department'
+      ? 'Department lead'
+      : 'Worker agent'
+  const selectedSummary = selection.kind === 'ceo'
+    ? 'Jeff owns company value, profitability, targets, department cadence, rule-book stewardship, approval governance, and weekly/monthly/quarterly reports.'
+    : selection.kind === 'department'
+      ? selectedDepartment?.mission
+      : `${selection.worker} reports through ${selectedDepartment?.lead} to Jeff and produces draft-support work for Benjamin review.`
+
   return (
-    <section className="thallo-org-shell" aria-label="Thallo organisation chart">
-      <div className="thallo-ceo-card">
-        <p className="portal-kicker">Reports directly to Benjamin</p>
-        <h2>Jeff — Thallo CEO</h2>
-        <p>
-          Jeff owns company value, profitability, targets, department cadence, rule-book stewardship,
-          approval governance, and weekly/monthly/quarterly reports.
-        </p>
+    <section className="thallo-org-shell" aria-label="Interactive Thallo organisation chart">
+      <div className="thallo-org-intro">
+        <div>
+          <p className="portal-kicker">Interactive company map</p>
+          <h2>Thallo AI team hierarchy</h2>
+          <p>
+            Thallo is modelled as an AI-assisted internal operating structure: Benjamin owns and approves,
+            Jeff leads as CEO, departments organise specialist agents, and every output remains draft support.
+          </p>
+        </div>
+        <div className="thallo-org-legend" aria-label="Governance summary">
+          <span>Benjamin approval for external, clinical, financial, legal, regulatory, client-facing, or irreversible actions</span>
+        </div>
       </div>
-      <div className="thallo-department-grid">
-        {departments.map((department) => (
-          <article className="thallo-department-card" key={department.name}>
-            <p className="portal-kicker">Department</p>
-            <h3>{department.name}</h3>
-            <p><strong>Lead:</strong> {department.lead}</p>
-            <p>{department.mission}</p>
-            <ul>
-              {department.workers.map((worker) => <li key={worker}>{worker}</li>)}
-            </ul>
-          </article>
-        ))}
+
+      <div className="thallo-org-board">
+        <div className="thallo-org-visual" role="group" aria-label="Hierarchy: Benjamin to Jeff to department leads and worker agents">
+          <div className="thallo-org-tier owner-tier">
+            <div className="thallo-owner-node">
+              <span className="org-node-label">Owner & final approval</span>
+              <strong>Benjamin</strong>
+            </div>
+          </div>
+
+          <div className="org-connector vertical" aria-hidden="true" />
+
+          <div className="thallo-org-tier ceo-tier">
+            <button
+              type="button"
+              className={`thallo-ceo-node ${selection.kind === 'ceo' ? 'selected' : ''}`}
+              onClick={() => setSelection({ kind: 'ceo' })}
+              aria-pressed={selection.kind === 'ceo'}
+            >
+              <span className="org-node-label">CEO</span>
+              <strong>Jeff</strong>
+              <span>Thallo CEO · reports to Benjamin</span>
+            </button>
+          </div>
+
+          <div className="org-connector fan" aria-hidden="true" />
+
+          <div className="thallo-department-grid interactive">
+            {departments.map((department, index) => {
+              const active = selection.kind !== 'ceo' && selection.index === index
+              const compliance = department.name.includes('Compliance')
+              return (
+                <article className={`thallo-department-card ${active ? 'selected' : ''} ${compliance ? 'compliance' : ''}`} key={department.name}>
+                  <button
+                    type="button"
+                    className="thallo-department-button"
+                    onClick={() => setSelection({ kind: 'department', index })}
+                    aria-pressed={selection.kind === 'department' && selection.index === index}
+                  >
+                    <span className="portal-kicker">{compliance ? 'Cross-functional review' : 'Department'}</span>
+                    <span className="thallo-department-title">{department.name}</span>
+                    <span><strong>Lead:</strong> {department.lead}</span>
+                    <span>{department.mission}</span>
+                  </button>
+                  <div className="thallo-worker-cloud" role="group" aria-label={`${department.name} worker agents`}>
+                    {department.workers.map((worker) => (
+                      <button
+                        key={worker}
+                        type="button"
+                        className={`thallo-worker-chip ${selection.kind === 'worker' && selection.worker === worker ? 'selected' : ''}`}
+                        onClick={() => setSelection({ kind: 'worker', index, worker })}
+                        aria-pressed={selection.kind === 'worker' && selection.worker === worker}
+                      >
+                        {worker}
+                      </button>
+                    ))}
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        </div>
+
+        <aside className="thallo-org-detail" aria-live="polite">
+          <p className="portal-kicker">{selectedEyebrow}</p>
+          <h3>{selectedTitle}</h3>
+          <p>{selectedSummary}</p>
+
+          {selectedDepartment && (
+            <div className="thallo-detail-stack">
+              <p><strong>Reports to:</strong> Jeff — Thallo CEO</p>
+              <p><strong>Lead:</strong> {selectedDepartment.lead}</p>
+              <p><strong>Worker agents:</strong> {selectedDepartment.workers.join(', ')}</p>
+            </div>
+          )}
+
+          <div className="thallo-approval-card">
+            <strong>Approval boundary</strong>
+            <p>
+              Agents may analyse, draft, monitor, organise, and report. Clinical, regulatory, financial,
+              public, client-facing, or irreversible decisions stay with Benjamin.
+            </p>
+          </div>
+
+          <div className="thallo-compliance-note">
+            <Icon name="shield" size={18} />
+            <span>Compliance is a review layer for public, clinical, legal, financial, regulatory, and client-facing work.</span>
+          </div>
+        </aside>
       </div>
     </section>
   )
