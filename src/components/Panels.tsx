@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { JOURNEY, MODELS, NODES, PERSONAS, SKILLS, TOOLS, UPGRADES } from '../data'
+import { JOURNEY, MODELS, NODES, PERSONAS, SKILLS, TOOLS, UPGRADES, WORKFLOW_CATEGORIES, WORKFLOWS } from '../data'
 import type { NodeId } from '../data'
 import { Icon } from './Icon'
 
@@ -241,6 +241,89 @@ export function Personas() {
             </ul>
           </article>
         ))}
+      </div>
+    </div>
+  )
+}
+
+/* ---------- Workflows tab ---------- */
+
+export function Workflows() {
+  const [selectedId, setSelectedId] = useState(WORKFLOWS[4]?.id ?? WORKFLOWS[0].id)
+  const selected = WORKFLOWS.find((w) => w.id === selectedId) ?? WORKFLOWS[0]
+
+  const workflowsByCategory = WORKFLOW_CATEGORIES.map((category) => ({
+    ...category,
+    items: WORKFLOWS.filter((workflow) => workflow.category === category.id),
+  }))
+
+  return (
+    <div className="tab-pane workflows-pane">
+      <header className="section-head wide">
+        <span className="section-label">Reusable operating loops</span>
+        <h2>Workflows make the system stronger than a list of agents</h2>
+        <p>
+          Agents decide, tools act, models think — workflows are the repeatable playbooks that turn that stack into
+          dependable routines. Click any workflow to see the lightweight steps behind it.
+        </p>
+      </header>
+
+      <div className="workflow-layout">
+        <div className="workflow-index" aria-label="Workflow categories">
+          {workflowsByCategory.map((category, categoryIndex) => (
+            <section className="workflow-category rise" key={category.id} style={{ animationDelay: `${categoryIndex * 70}ms` }}>
+              <div className="workflow-category-head">
+                <h3>{category.label}</h3>
+                <p>{category.blurb}</p>
+              </div>
+              <div className="workflow-buttons" aria-label={`${category.label} workflows`}>
+                {category.items.map((workflow) => (
+                  <button
+                    key={workflow.id}
+                    type="button"
+                    className={`workflow-button accent-${workflow.accent} ${selected.id === workflow.id ? 'active' : ''}`}
+                    aria-pressed={selected.id === workflow.id}
+                    aria-controls="workflow-detail-card"
+                    onClick={() => setSelectedId(workflow.id)}
+                  >
+                    <span className="workflow-button-title">{workflow.title}</span>
+                    <span className="workflow-button-command">{workflow.command}</span>
+                    <span className="workflow-button-summary">{workflow.summary}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <aside id="workflow-detail-card" className={`workflow-detail accent-${selected.accent}`} aria-live="polite">
+          <div className="workflow-detail-top">
+            <span className="workflow-detail-kicker">{WORKFLOW_CATEGORIES.find((c) => c.id === selected.category)?.label}</span>
+            <span className="workflow-command">{selected.command}</span>
+          </div>
+          <h3>{selected.title}</h3>
+          <p className="workflow-owner">Owner: {selected.owner}</p>
+          <p className="workflow-detail-summary">{selected.detail}</p>
+          <ol className="workflow-steps" aria-label={`${selected.title} workflow steps`}>
+            {selected.steps.map((step, i) => (
+              <li key={step}>
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+          <div className="workflow-mini-flow" aria-hidden="true">
+            {selected.steps.map((step, i) => (
+              <span key={step}>
+                {step}
+                {i < selected.steps.length - 1 && <b>→</b>}
+              </span>
+            ))}
+          </div>
+          <p className="workflow-note">
+            Public-safe summary: credentials, private data, PHI, and production-changing actions stay behind explicit gates.
+          </p>
+        </aside>
       </div>
     </div>
   )

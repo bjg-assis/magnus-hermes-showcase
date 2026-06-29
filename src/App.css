@@ -242,11 +242,41 @@
 
 .map-wrap {
   position: relative;
-  background: linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 100%);
-  border: 1px solid var(--hairline);
-  border-radius: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 54%, rgba(0, 113, 227, 0.12), transparent 23%),
+    radial-gradient(circle at 18% 20%, rgba(41, 151, 255, 0.10), transparent 22%),
+    radial-gradient(circle at 82% 80%, rgba(201, 52, 0, 0.08), transparent 24%),
+    linear-gradient(180deg, #fbfbfd 0%, #f4f7fb 58%, #f1f4f8 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 28px;
   padding: 14px;
   box-shadow: var(--shadow-card);
+}
+
+.map-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+  border-radius: 22px;
+  background-image:
+    radial-gradient(circle, rgba(0, 113, 227, 0.18) 0 1px, transparent 1.6px),
+    radial-gradient(circle, rgba(201, 52, 0, 0.10) 0 1px, transparent 1.8px);
+  background-position: 16px 24px, 104px 86px;
+  background-size: 126px 92px, 178px 134px;
+  mask-image: radial-gradient(circle at 50% 52%, black 0 58%, transparent 78%);
+  opacity: 0.46;
+}
+
+.map-wrap::after {
+  content: '';
+  position: absolute;
+  inset: auto 10% 8% 10%;
+  height: 22%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0, 113, 227, 0.10), transparent 72%);
+  filter: blur(18px);
 }
 
 .map-toolbar {
@@ -352,26 +382,62 @@
 }
 
 .map-svg {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
+}
+
+.cosmos-field {
+  fill: transparent;
+}
+
+.starfield circle {
+  fill: rgba(0, 113, 227, 0.28);
+  filter: drop-shadow(0 0 4px rgba(41, 151, 255, 0.35));
+}
+
+.solar-orbits ellipse {
+  fill: none;
+  stroke: rgba(0, 113, 227, 0.13);
+  stroke-width: 1.15;
+  stroke-dasharray: 1.5 10;
+  transform-origin: 500px 350px;
+  animation: ring-spin 110s linear infinite;
+}
+
+.solar-orbits ellipse:nth-child(2) {
+  animation-duration: 140s;
+  stroke: rgba(0, 113, 227, 0.11);
+}
+
+.solar-orbits ellipse:nth-child(3) {
+  animation-duration: 180s;
+  stroke: rgba(0, 113, 227, 0.10);
+}
+
+.solar-orbits ellipse:nth-child(4) {
+  animation-duration: 220s;
+  stroke: rgba(201, 52, 0, 0.10);
 }
 
 /* --- edges --- */
 .edge-base {
   fill: none;
   stroke: url(#edge-grad);
-  stroke-width: 1.5;
-  opacity: 0.6;
+  stroke-width: 1.4;
+  opacity: 0.46;
 }
 
 .edge-flow {
   fill: none;
   stroke: var(--blue-soft);
-  stroke-width: 2;
-  stroke-dasharray: 3 26;
+  stroke-width: 2.2;
+  stroke-dasharray: 2 24;
   stroke-linecap: round;
-  opacity: 0.7;
+  opacity: 0.72;
+  filter: drop-shadow(0 0 4px rgba(41, 151, 255, 0.32));
   animation: flow 3.2s linear infinite;
 }
 
@@ -381,9 +447,10 @@
 
 .edge-tunnel {
   fill: none;
-  stroke: rgba(0, 113, 227, 0.08);
-  stroke-width: 12;
+  stroke: rgba(0, 113, 227, 0.09);
+  stroke-width: 16;
   stroke-linecap: round;
+  filter: blur(0.4px);
 }
 
 .edge.tailscale .edge-base {
@@ -405,7 +472,7 @@
 }
 
 .tunnel-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -416,10 +483,10 @@
 /* --- orbit & satellites --- */
 .orbit-ring {
   fill: none;
-  stroke: rgba(0, 0, 0, 0.1);
-  stroke-dasharray: 2 7;
-  animation: ring-spin 80s linear infinite;
-  transform-origin: 500px 330px;
+  stroke: rgba(0, 113, 227, 0.18);
+  stroke-dasharray: 1.5 7;
+  animation: ring-spin 72s linear infinite;
+  transform-origin: 500px 350px;
 }
 
 @keyframes ring-spin {
@@ -458,8 +525,9 @@
 
 .node-aura {
   fill: var(--node-accent);
-  opacity: 0.06;
+  opacity: 0.10;
   transition: opacity 0.3s, r 0.3s;
+  filter: blur(0.2px);
 }
 
 .node:hover .node-aura,
@@ -480,13 +548,27 @@
 }
 
 .node-core {
-  fill: #ffffff;
+  fill: rgba(255, 255, 255, 0.96);
   stroke: none;
+}
+
+.node[aria-label^='Magnus'] .node-aura {
+  opacity: 0.24;
+  filter: drop-shadow(0 0 20px rgba(0, 113, 227, 0.42));
+}
+
+.node[aria-label^='Magnus'] .node-core {
+  fill: radial-gradient(circle, #ffffff 0%, #eef7ff 100%);
+}
+
+.node[aria-label^='Magnus'] .node-rim {
+  stroke: rgba(0, 113, 227, 0.55);
+  stroke-width: 2.4;
 }
 
 .node-rim {
   fill: none;
-  stroke: rgba(0, 0, 0, 0.14);
+  stroke: rgba(0, 0, 0, 0.13);
   stroke-width: 1.2;
   transition: stroke 0.25s, stroke-width 0.25s;
 }
@@ -509,7 +591,7 @@
 
 .node-name {
   font-family: var(--font-stack);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
   fill: var(--text);
@@ -523,7 +605,7 @@
 
 .node-role {
   font-family: var(--font-stack);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 500;
   fill: var(--text-tertiary);
   text-anchor: middle;
@@ -1145,6 +1227,250 @@
   background: rgba(0, 0, 0, 0.05);
 }
 
+/* ============ workflows ============ */
+#panel-workflows .tab-pane {
+  padding: clamp(24px, 4vw, 40px);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(0, 113, 227, 0.10), transparent 34%),
+    radial-gradient(circle at 88% 8%, rgba(255, 159, 10, 0.12), transparent 26%),
+    var(--panel);
+  border-radius: 28px;
+}
+
+.workflows-pane {
+  gap: 24px;
+}
+
+.workflow-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.75fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.workflow-index {
+  display: grid;
+  gap: 14px;
+}
+
+.workflow-category {
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(0, 0, 0, 0.055);
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
+}
+
+.workflow-category-head {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.workflow-category-head h3 {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.workflow-category-head p {
+  max-width: 680px;
+  font-size: 13.2px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.workflow-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 10px;
+}
+
+.workflow-button {
+  display: grid;
+  gap: 5px;
+  min-height: 126px;
+  padding: 15px;
+  text-align: left;
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, rgba(0, 0, 0, 0.06));
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.045);
+  cursor: pointer;
+  transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s, background 0.22s;
+}
+
+.workflow-button:hover,
+.workflow-button:focus-visible {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 42%, rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-lift);
+}
+
+.workflow-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  outline-offset: 2px;
+}
+
+.workflow-button.active {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 9%, #ffffff), #ffffff);
+  border-color: color-mix(in srgb, var(--accent) 58%, rgba(0, 0, 0, 0.08));
+}
+
+.workflow-button-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.workflow-button-command {
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 980px;
+  background: color-mix(in srgb, var(--accent) 12%, #f5f5f7);
+  color: color-mix(in srgb, var(--accent) 72%, #1d1d1f);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.workflow-button-summary {
+  font-size: 12.8px;
+  line-height: 1.42;
+  color: var(--text-secondary);
+}
+
+.workflow-detail {
+  position: sticky;
+  top: 118px;
+  padding: 24px;
+  border-radius: 24px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 12%, #ffffff), #ffffff 54%),
+    #ffffff;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, rgba(0, 0, 0, 0.08));
+  box-shadow: var(--shadow-lift);
+}
+
+.workflow-detail-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.workflow-detail-kicker,
+.workflow-command {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 980px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.workflow-detail-kicker {
+  color: color-mix(in srgb, var(--accent) 74%, #0b1220);
+  text-transform: uppercase;
+}
+
+.workflow-command {
+  padding: 4px 9px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, rgba(0, 0, 0, 0.08));
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.workflow-detail h3 {
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.workflow-owner {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent) 76%, #1d1d1f);
+  margin-bottom: 14px;
+}
+
+.workflow-detail-summary {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.workflow-steps {
+  display: grid;
+  gap: 9px;
+  list-style: none;
+  padding: 16px 0 0;
+  margin: 18px 0 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.workflow-steps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.workflow-steps span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 13%, #ffffff);
+  color: color-mix(in srgb, var(--accent) 76%, #1d1d1f);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.workflow-note {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.035);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.workflow-mini-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.workflow-mini-flow span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 980px;
+  background: color-mix(in srgb, var(--accent) 9%, #ffffff);
+  color: color-mix(in srgb, var(--accent) 72%, #1d1d1f);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.workflow-mini-flow b {
+  color: var(--text-tertiary);
+  font-weight: 700;
+}
+
 /* ============ journey ============ */
 #panel-journey .tab-pane {
   padding: clamp(24px, 4vw, 40px);
@@ -1276,8 +1602,13 @@
     grid-template-columns: 1fr;
   }
 
-  .detail-panel {
+  .detail-panel,
+  .workflow-detail {
     position: static;
+  }
+
+  .workflow-layout {
+    grid-template-columns: 1fr;
   }
 }
 

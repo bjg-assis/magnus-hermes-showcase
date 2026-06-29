@@ -13,6 +13,7 @@ export type NodeId =
   | 'boris'
   | 'sterling'
   | 'professor'
+  | 'harvey'
   | 'surgeons'
   | 'aegis'
   | 'aiworker'
@@ -39,8 +40,8 @@ export const NODES: MapNode[] = [
     id: 'telegram',
     name: 'Telegram',
     role: 'The front door',
-    x: 118,
-    y: 330,
+    x: 150,
+    y: 350,
     r: 40,
     accent: 'ice',
     icon: 'chat',
@@ -56,8 +57,8 @@ export const NODES: MapNode[] = [
     name: 'Magnus',
     role: 'The coordinator · Mac mini (i7)',
     x: 500,
-    y: 330,
-    r: 56,
+    y: 350,
+    r: 60,
     accent: 'cyan',
     icon: 'hub',
     facts: ['Always on, 24/7', 'Canonical hub', 'Plans, routes, remembers', 'Coordinates weekly estate health'],
@@ -73,7 +74,7 @@ export const NODES: MapNode[] = [
     name: 'Apollo',
     role: 'Remote worker · Mac mini (i5)',
     x: 846,
-    y: 178,
+    y: 182,
     r: 44,
     accent: 'green',
     icon: 'worker',
@@ -89,7 +90,7 @@ export const NODES: MapNode[] = [
     name: 'Nestor',
     role: 'Strategic commander · MacBook',
     x: 846,
-    y: 478,
+    y: 522,
     r: 44,
     accent: 'amber',
     icon: 'laptop',
@@ -104,8 +105,8 @@ export const NODES: MapNode[] = [
     id: 'obsidian',
     name: 'Obsidian Vault',
     role: 'The memory garden',
-    x: 268,
-    y: 548,
+    x: 300,
+    y: 556,
     r: 42,
     accent: 'rose',
     icon: 'vault',
@@ -119,8 +120,8 @@ export const NODES: MapNode[] = [
     id: 'homeassistant',
     name: 'Home Assistant',
     role: 'The smart-home bridge',
-    x: 672,
-    y: 560,
+    x: 640,
+    y: 592,
     r: 42,
     accent: 'amber',
     icon: 'house',
@@ -136,7 +137,7 @@ export const NODES: MapNode[] = [
     name: 'The Open Web',
     role: 'The outside world',
     x: 500,
-    y: 86,
+    y: 78,
     r: 38,
     accent: 'ice',
     icon: 'globe',
@@ -230,6 +231,23 @@ export const NODES: MapNode[] = [
     ],
   },
   {
+    id: 'harvey',
+    name: 'Harvey',
+    role: 'Standby specialist · UK legal counsel',
+    x: 0,
+    y: 0,
+    r: 20,
+    accent: 'amber',
+    icon: 'shield',
+    satellite: true,
+    facts: ['On the Mac Pro', 'UK legal strategy', 'Contracts, AI law, business, property', 'Weekly AI-law watch'],
+    body: [
+      'Harvey is the legal strategist: a private Mac Pro specialist for UK legal research, contract review, terms, AI law, business law, property questions, employment issues, and negotiation posture.',
+      'He is designed to be confident and commercially minded without pretending to replace a solicitor: Harvey can draft, analyse, map risk, and recommend a move, while high-stakes external action remains approval-gated.',
+      'A weekly watch keeps an eye on UK agentic-AI legal developments from government, regulators, courts, professional bodies, and credible secondary sources.',
+    ],
+  },
+  {
     id: 'surgeons',
     name: 'Surgeons’ Assistant',
     role: 'Clinical decision assistant · future Magnus specialist',
@@ -272,12 +290,12 @@ export interface Edge {
 }
 
 export const EDGES: Edge[] = [
-  { id: 'tg-mag', from: 'telegram', to: 'magnus', path: 'M 118 330 Q 310 288 500 330' },
-  { id: 'mag-web', from: 'magnus', to: 'web', path: 'M 500 330 Q 478 200 500 86' },
-  { id: 'mag-apollo', from: 'magnus', to: 'apollo', path: 'M 500 330 Q 690 222 846 178', tailscale: true },
-  { id: 'mag-nestor', from: 'magnus', to: 'nestor', path: 'M 500 330 Q 690 432 846 478', tailscale: true },
-  { id: 'mag-obsidian', from: 'magnus', to: 'obsidian', path: 'M 500 330 Q 370 460 268 548' },
-  { id: 'mag-ha', from: 'magnus', to: 'homeassistant', path: 'M 500 330 Q 610 462 672 560' },
+  { id: 'tg-mag', from: 'telegram', to: 'magnus', path: 'M 150 350 C 252 244 396 248 500 350' },
+  { id: 'mag-web', from: 'magnus', to: 'web', path: 'M 500 350 C 450 246 456 142 500 78' },
+  { id: 'mag-apollo', from: 'magnus', to: 'apollo', path: 'M 500 350 C 610 176 734 134 846 182', tailscale: true },
+  { id: 'mag-nestor', from: 'magnus', to: 'nestor', path: 'M 500 350 C 626 540 734 600 846 522', tailscale: true },
+  { id: 'mag-obsidian', from: 'magnus', to: 'obsidian', path: 'M 500 350 C 408 430 374 530 300 556' },
+  { id: 'mag-ha', from: 'magnus', to: 'homeassistant', path: 'M 500 350 C 564 434 610 524 640 592' },
 ]
 
 export interface DemoStep {
@@ -292,7 +310,7 @@ export const DEMO_STEPS: DemoStep[] = [
   {
     caption: 'A message takes flight',
     detail: 'Benjamin texts: "Plan my Saturday — and warm up the studio."',
-    path: 'M 118 330 Q 310 288 500 330',
+    path: 'M 150 350 C 252 244 396 248 500 350',
     highlight: ['telegram', 'magnus'],
     edgeId: 'tg-mag',
   },
@@ -304,35 +322,35 @@ export const DEMO_STEPS: DemoStep[] = [
   {
     caption: 'Scouts head for the web',
     detail: 'Search and browser tools fetch weather, opening hours, and ideas.',
-    path: 'M 500 330 Q 478 200 500 86',
+    path: 'M 500 350 C 450 246 456 142 500 78',
     highlight: ['magnus', 'web'],
     edgeId: 'mag-web',
   },
   {
     caption: 'The vault remembers',
     detail: 'Obsidian notes recall preferences: no early starts, loves coastal walks.',
-    path: 'M 500 330 Q 370 460 268 548',
+    path: 'M 500 350 C 408 430 374 530 300 556',
     highlight: ['magnus', 'obsidian'],
     edgeId: 'mag-obsidian',
   },
   {
     caption: 'Apollo takes the heavy load',
     detail: 'The deep itinerary research is delegated over the secure Tailscale tunnel.',
-    path: 'M 500 330 Q 690 222 846 178',
+    path: 'M 500 350 C 610 176 734 134 846 182',
     highlight: ['magnus', 'apollo'],
     edgeId: 'mag-apollo',
   },
   {
     caption: 'The house responds',
     detail: 'Home Assistant nudges the studio heating — privately, on the home network.',
-    path: 'M 500 330 Q 610 462 672 560',
+    path: 'M 500 350 C 564 434 610 524 640 592',
     highlight: ['magnus', 'homeassistant'],
     edgeId: 'mag-ha',
   },
   {
     caption: 'The answer flies home',
     detail: 'Magnus assembles everything into one tidy reply back to Telegram.',
-    path: 'M 500 330 Q 310 288 118 330',
+    path: 'M 500 350 C 396 248 252 244 150 350',
     highlight: ['magnus', 'telegram'],
     edgeId: 'tg-mag',
   },
@@ -408,7 +426,7 @@ export const UPGRADES: UpgradeCard[] = [
   {
     name: 'New specialist agents',
     eyebrow: 'Expanding crew',
-    blurb: 'The constellation now has clearer roles for Boris, Nestor, Apollo, Sterling, The Professor, Aegis, and Surgeon’s Assistant — each with explicit accountability and safe boundaries.',
+    blurb: 'The constellation now has clearer roles for Boris, Nestor, Apollo, Sterling, The Professor, Harvey, Aegis, and Surgeon’s Assistant — each with explicit accountability and safe boundaries.',
     proof: 'More agents, clearer handoffs, less chaos',
     accent: 'green',
   },
@@ -426,6 +444,207 @@ export const SKILLS: SkillCard[] = [
   { name: 'Inbox Triage', blurb: 'Sort the important from the ignorable and draft the replies.' },
   { name: 'Watchkeeper', blurb: 'Monitor pages and feeds; speak up only when something truly changes.' },
   { name: 'Trip Planner', blurb: 'Turn "somewhere nice this weekend?" into a full itinerary.' },
+]
+
+export type WorkflowCategory = 'personal' | 'software' | 'research' | 'legal' | 'other'
+
+export interface WorkflowCard {
+  id: string
+  title: string
+  command: string
+  category: WorkflowCategory
+  owner: string
+  summary: string
+  detail: string
+  steps: string[]
+  accent: Accent
+}
+
+export const WORKFLOW_CATEGORIES: Array<{ id: WorkflowCategory; label: string; blurb: string }> = [
+  { id: 'personal', label: 'Personal assistant', blurb: 'Brief, remember, triage, and prepare the day without taking external action.' },
+  { id: 'software', label: 'Software development', blurb: 'Turn product ideas into verified code, deployments, and operating-system maintenance.' },
+  { id: 'research', label: 'Research', blurb: 'Source-backed discovery, synthesis, and argument mapping for serious questions.' },
+  { id: 'legal', label: 'Legal', blurb: 'UK legal research, drafting, risk mapping, and AI-law monitoring with external action approval-gated.' },
+  { id: 'other', label: 'Others', blurb: 'Watchdogs, health checks, and cross-system routines that keep the estate reliable.' },
+]
+
+export const WORKFLOWS: WorkflowCard[] = [
+  {
+    id: 'morning-briefing',
+    title: 'Morning Briefing',
+    command: 'scheduled workflow',
+    category: 'personal',
+    owner: 'Magnus / Nestor',
+    summary: 'A concise start-of-day briefing for weather, calendar, priorities, and overnight signals.',
+    detail: 'Designed as a personal-assistant loop: gather context, filter noise, and return a useful plan without sending messages or changing systems on its own.',
+    steps: ['Collect signals', 'Filter relevance', 'Draft brief', 'Send to Benjamin'],
+    accent: 'ice',
+  },
+  {
+    id: 'diary-context',
+    title: 'Diary & recent context',
+    command: 'scheduled workflow',
+    category: 'personal',
+    owner: 'Nestor / Obsidian',
+    summary: 'Keeps a rolling memory of recent work so agents start with context instead of asking Benjamin to repeat himself.',
+    detail: 'Nightly and weekly Obsidian consolidation turns session traces into safer, higher-signal memory notes while keeping raw task state out of permanent memory.',
+    steps: ['Read recent activity', 'Extract stable context', 'Write digest', 'Flag review items'],
+    accent: 'rose',
+  },
+  {
+    id: 'executive-triage',
+    title: 'Executive triage',
+    command: 'assistant workflow',
+    category: 'personal',
+    owner: 'Nestor / Sterling',
+    summary: 'Sorts tasks, drafts replies, and prepares decisions while keeping external sends approval-gated.',
+    detail: 'This is the chief-of-staff pattern: make the next action clear, produce draft text when useful, and leave anything public or consequential for human approval.',
+    steps: ['Capture inbox', 'Classify urgency', 'Draft next action', 'Ask for approval'],
+    accent: 'amber',
+  },
+  {
+    id: 'ai-worker',
+    title: 'AI Worker',
+    command: '/ai_worker',
+    category: 'software',
+    owner: 'Boris',
+    summary: 'Runs bounded background missions with a brief, logs, status, and a final result Boris can verify.',
+    detail: 'AI Worker is for scoped execution that should not disappear into a black box: scripts, checks, data pulls, builds, and repeatable loops with an auditable handoff.',
+    steps: ['Write mission brief', 'Run worker lane', 'Collect logs', 'Verify result'],
+    accent: 'green',
+  },
+  {
+    id: 'orca-forge',
+    title: 'OrcaForge',
+    command: '/orca_forge',
+    category: 'software',
+    owner: 'Boris',
+    summary: 'The high-power software forge: visible Orca cockpit, Claude implementation, Codex review, Boris verification.',
+    detail: 'Used for serious builds where Benjamin should be able to watch the engineering cockpit and where push, deploy, migration, or paid-model gates stay explicit.',
+    steps: ['Mission brief', 'Visible builder lane', 'Adversarial review', 'Verify & deploy gate'],
+    accent: 'cyan',
+  },
+  {
+    id: 'orca-forge-async',
+    title: 'OrcaForge Async',
+    command: '/orca_forge_async',
+    category: 'software',
+    owner: 'Boris',
+    summary: 'Launches the same OrcaForge playbook in a separate background mission so Telegram stays free.',
+    detail: 'This is a thin launcher, not a second forge. It writes a context handoff, starts a fresh Boris worker with the current OrcaForge skill loaded, then reports only completion, blockers, failures, or timeout.',
+    steps: ['Capture context', 'Start async worker', 'Run OrcaForge', 'Report final/blocker'],
+    accent: 'green',
+  },
+  {
+    id: 'full-system-update',
+    title: 'Full System Update',
+    command: '/full_system_update',
+    category: 'software',
+    owner: 'Boris / Magnus',
+    summary: 'A safe maintenance workflow for the Hermes estate: backups, updates, tests, gateway checks, and rollback notes.',
+    detail: 'This is the weekly operating-system hardening loop. It updates deliberately, preserves local work, verifies gateways and key integrations, then reports evidence.',
+    steps: ['Backup', 'Update', 'Test gateways', 'Report rollback'],
+    accent: 'amber',
+  },
+  {
+    id: 'creative-designer',
+    title: 'Creative Designer',
+    command: '/creative_designer',
+    category: 'software',
+    owner: 'Boris',
+    summary: 'A reusable visual-design workflow: turn a brief and references into several concepts, then production-ready artwork.',
+    detail: 'Boris’s design lane for diagrams, graphics, and interface mockups. It captures the visual brief and references, explores multiple concepts, runs critique loops, and draws on a likes/dislikes reference library plus Figma and context integration before producing the final.',
+    steps: ['Capture brief & references', 'Explore concepts', 'Critique loop', 'Produce final'],
+    accent: 'rose',
+  },
+  {
+    id: 'research',
+    title: 'Research',
+    command: '/research',
+    category: 'research',
+    owner: 'The Professor',
+    summary: 'Source-backed research and synthesis for questions that deserve more than a quick answer.',
+    detail: 'The research workflow gathers sources, checks claims, preserves traceability, and returns a structured synthesis rather than a loose web summary.',
+    steps: ['Frame question', 'Gather sources', 'Check evidence', 'Synthesize answer'],
+    accent: 'rose',
+  },
+  {
+    id: 'storm',
+    title: 'STORM',
+    command: '/storm',
+    category: 'research',
+    owner: 'The Professor',
+    summary: 'A multi-perspective exploration workflow for outlines, arguments, and viewpoints before final writing.',
+    detail: 'STORM is useful when the answer benefits from structured debate: build perspectives, map disagreements, and turn them into a stronger outline.',
+    steps: ['Generate perspectives', 'Debate angles', 'Map outline', 'Prepare synthesis'],
+    accent: 'ice',
+  },
+  {
+    id: 'research-storm',
+    title: 'Research STORM',
+    command: '/research_storm',
+    category: 'research',
+    owner: 'The Professor',
+    summary: 'A thin orchestration that runs Research and then STORM in sequence for richer evidence-backed synthesis.',
+    detail: 'First it establishes the source base; then it stress-tests the topic through STORM-style perspectives before producing an organised final view.',
+    steps: ['Run research', 'Extract claims', 'Run STORM', 'Merge synthesis'],
+    accent: 'cyan',
+  },
+  {
+    id: 'legal-counsel',
+    title: 'Legal Counsel',
+    command: 'Harvey / legal workflow',
+    category: 'legal',
+    owner: 'Harvey',
+    summary: 'UK-focused legal issue-spotting, drafting, contract review, negotiation strategy, and source-backed legal research.',
+    detail: 'Harvey starts with the bottom line, identifies the legal and commercial levers, maps practical options, drafts wording where useful, and flags when Benjamin should instruct a qualified solicitor before acting.',
+    steps: ['Frame issue', 'Check sources', 'Map options', 'Draft or recommend'],
+    accent: 'amber',
+  },
+  {
+    id: 'agentic-ai-law-watch',
+    title: 'Agentic AI Legal Watch',
+    command: 'weekly scheduled workflow',
+    category: 'legal',
+    owner: 'Harvey',
+    summary: 'A weekly UK watch for legal developments relating to agentic AI, legal tech, regulators, cases, and guidance.',
+    detail: 'Harvey checks primary UK sources first — government, regulators, professional bodies, legislation, courts — then uses credible secondary analysis for context before sending Benjamin a concise action-focused summary.',
+    steps: ['Scan authorities', 'Filter material changes', 'Summarise impact', 'Recommend action'],
+    accent: 'rose',
+  },
+  {
+    id: 'watchkeeper',
+    title: 'Watchkeeper',
+    command: 'scheduled workflow',
+    category: 'other',
+    owner: 'Magnus',
+    summary: 'Monitors pages, services, or feeds and speaks up only when something meaningful changes.',
+    detail: 'Watchkeeper-style jobs reduce noise: they poll quietly, compare against expected state, and alert Benjamin only when a change or failure matters.',
+    steps: ['Poll target', 'Compare state', 'Judge meaning', 'Alert if needed'],
+    accent: 'green',
+  },
+  {
+    id: 'integration-watchdog',
+    title: 'Integration health watchdog',
+    command: 'scheduled workflow',
+    category: 'other',
+    owner: 'Magnus',
+    summary: 'Checks key integrations periodically and alerts only when a connection needs attention.',
+    detail: 'A small reliability loop for the integrations layer: stay silent while healthy, report actionable failures before they break larger workflows.',
+    steps: ['Check integration health', 'Confirm expected access', 'Stay quiet', 'Alert on failure'],
+    accent: 'amber',
+  },
+  {
+    id: 'dashboard-watchdog',
+    title: 'Dashboard watchdog',
+    command: 'scheduled workflow',
+    category: 'other',
+    owner: 'Boris',
+    summary: 'Checks the departmental research dashboard on a schedule so service failures are caught early.',
+    detail: 'A practical production-ops loop: probe the app, keep routine success silent, and send an alert with enough context to fix a real outage.',
+    steps: ['Probe app', 'Check response', 'Stay silent on success', 'Alert on outage'],
+    accent: 'ice',
+  },
 ]
 
 export interface ModelCartridge {
@@ -527,6 +746,18 @@ export const PERSONAS: Persona[] = [
     description:
       'Summoned for questions that deserve real depth. Researches patiently, compares sources, explains clearly — and files everything in the vault for next time.',
     traits: ['Curious', 'Thorough', 'Loves a footnote'],
+  },
+  {
+    id: 'harvey',
+    name: 'Harvey',
+    title: 'The Legal Strategist',
+    status: 'remote',
+    statusLabel: 'Mac Pro · Telegram',
+    accent: 'amber',
+    icon: 'shield',
+    description:
+      'A confident UK legal specialist for contracts, terms, AI law, business law, property, employment, and regulatory questions. Commercially aggressive where useful, but source-backed and approval-gated for real-world legal action.',
+    traits: ['Strategic', 'Concise', 'UK legal focus'],
   },
   {
     id: 'surgeons',

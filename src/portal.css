@@ -909,22 +909,64 @@
   margin-bottom: 16px;
 }
 
+.thallo-rulebook-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+
+.thallo-rulebook-head h3 {
+  margin-top: 2px;
+}
+
+.thallo-rulebook-badges,
+.thallo-rulebook-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.thallo-rulebook-badges {
+  justify-content: flex-end;
+}
+
+.thallo-rulebook-badges span {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 980px;
+  color: var(--blue-deep);
+  background: rgba(0, 113, 227, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.thallo-rulebook-actions {
+  align-items: center;
+  margin: 18px 0 10px;
+}
+
+.thallo-rulebook-download {
+  display: inline-flex;
+  width: fit-content;
+  text-decoration: none;
+}
+
 .thallo-rulebook-source {
   color: var(--text-tertiary) !important;
   font-size: 12.5px !important;
 }
 
-.thallo-rulebook-text {
-  overflow: auto;
-  max-height: 68vh;
-  padding: clamp(18px, 3vw, 28px);
-  white-space: pre-wrap;
-  line-height: 1.55;
-  color: #1d1d1f;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid var(--hairline);
-  border-radius: 24px;
-  box-shadow: var(--shadow-card);
+@media (max-width: 720px) {
+  .thallo-rulebook-head {
+    flex-direction: column;
+  }
+
+  .thallo-rulebook-badges {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 980px) {

@@ -12,21 +12,22 @@ const ACCENT_HEX = {
 } as const
 
 const MAGNUS_SATELLITE_ANGLES: Record<string, number> = {
-  boris: -162,
-  sterling: -112,
-  professor: -62,
-  surgeons: -12,
+  boris: 180,
+  sterling: 230,
+  professor: 278,
+  harvey: 316,
+  surgeons: 348,
   aegis: 38,
 }
 
 const BORIS_SKILL_ANGLES: Record<string, number> = {
-  aiworker: 215,
-  orcaforge: 145,
+  aiworker: 220,
+  orcaforge: 140,
 }
 
-const ORBIT_R = 126
-const BORIS_SKILL_ORBIT_R = 54
-const HUB = { x: 500, y: 330 }
+const ORBIT_R = 122
+const BORIS_SKILL_ORBIT_R = 56
+const HUB = { x: 500, y: 350 }
 
 const pointOnOrbit = (origin: { x: number; y: number }, radius: number, angleDeg: number) => {
   const angle = (angleDeg * Math.PI) / 180
@@ -97,7 +98,7 @@ export function NetworkMap({ selected, onSelect }: Props) {
 
       <svg
         className="map-svg"
-        viewBox="0 0 1000 650"
+        viewBox="0 0 1000 680"
         role="group"
         aria-label="Interactive map of the Magnus multiagent network"
       >
@@ -115,11 +116,28 @@ export function NetworkMap({ selected, onSelect }: Props) {
             <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor="#000000" floodOpacity="0.12" />
           </filter>
           <clipPath id="obsidian-clip">
-            <circle cx="268" cy="548" r="42" />
+            <circle cx="300" cy="556" r="42" />
           </clipPath>
         </defs>
 
-        <circle cx={HUB.x} cy={HUB.y} r="190" fill="url(#hub-halo)" aria-hidden="true" />
+        <rect width="1000" height="680" className="cosmos-field" aria-hidden="true" />
+        <g className="starfield" aria-hidden="true">
+          <circle cx="166" cy="122" r="1.8" />
+          <circle cx="245" cy="486" r="1.2" />
+          <circle cx="360" cy="166" r="1.5" />
+          <circle cx="638" cy="114" r="1.4" />
+          <circle cx="742" cy="374" r="1.7" />
+          <circle cx="884" cy="256" r="1.2" />
+          <circle cx="812" cy="574" r="1.6" />
+          <circle cx="126" cy="396" r="1.3" />
+        </g>
+        <g className="solar-orbits" aria-hidden="true">
+          <ellipse cx={HUB.x} cy={HUB.y} rx="154" ry="92" />
+          <ellipse cx={HUB.x} cy={HUB.y} rx="262" ry="158" />
+          <ellipse cx={HUB.x} cy={HUB.y} rx="392" ry="236" />
+          <ellipse cx={HUB.x} cy={HUB.y} rx="456" ry="286" />
+        </g>
+        <circle cx={HUB.x} cy={HUB.y} r="210" fill="url(#hub-halo)" aria-hidden="true" />
 
         {/* connections */}
         <g aria-hidden="true">
@@ -137,11 +155,11 @@ export function NetworkMap({ selected, onSelect }: Props) {
 
         {/* tailscale tunnel labels */}
         <g aria-hidden="true" className="tunnel-labels">
-          <text x="688" y="232" className="tunnel-label" transform="rotate(-17 688 232)">
-            tailscale · secure tunnel
+          <text x="696" y="224" className="tunnel-label" transform="rotate(-25 696 224)">
+            tailscale · secure orbit
           </text>
-          <text x="676" y="436" className="tunnel-label" transform="rotate(17 676 436)">
-            tailscale · secure tunnel
+          <text x="696" y="520" className="tunnel-label" transform="rotate(22 696 520)">
+            tailscale · secure orbit
           </text>
         </g>
 

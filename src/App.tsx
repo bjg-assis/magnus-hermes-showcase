@@ -1,16 +1,17 @@
 import { useRef, useState } from 'react'
 import './App.css'
 import { NetworkMap } from './components/NetworkMap'
-import { Capabilities, DetailPanel, Journey, Personas, StatCard } from './components/Panels'
+import { Capabilities, DetailPanel, Journey, Personas, StatCard, Workflows } from './components/Panels'
 import { STATS } from './data'
 import type { NodeId } from './data'
 
-type Tab = 'network' | 'capabilities' | 'personas' | 'journey'
+type Tab = 'network' | 'capabilities' | 'personas' | 'workflows' | 'journey'
 
 const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'network', label: 'Network' },
   { id: 'capabilities', label: 'Capabilities' },
   { id: 'personas', label: 'Personas' },
+  { id: 'workflows', label: 'Workflows' },
   { id: 'journey', label: 'Journey' },
 ]
 
@@ -104,6 +105,11 @@ export default function App() {
         {tab === 'personas' && (
           <section id="panel-personas" role="tabpanel" aria-labelledby="tab-personas">
             <Personas />
+          </section>
+        )}
+        {tab === 'workflows' && (
+          <section id="panel-workflows" role="tabpanel" aria-labelledby="tab-workflows">
+            <Workflows />
           </section>
         )}
         {tab === 'journey' && (

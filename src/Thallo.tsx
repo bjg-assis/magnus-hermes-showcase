@@ -418,30 +418,54 @@ function OrganisationChart() {
 }
 
 function RuleBook() {
-  const [text, setText] = useState('Loading rule book…')
+  const [meta, setMeta] = useState({ version: 'Loading…', updated: 'Loading…' })
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch('/thallo/organisation-rulebook.md', { cache: 'no-store' })
+    fetch('/api/thallo/rulebook?format=metadata', { cache: 'no-store' })
       .then((res) => {
-        if (!res.ok) throw new Error('Could not load rule book.')
-        return res.text()
+        if (!res.ok) throw new Error('Could not load rule book metadata.')
+        return res.json() as Promise<{ version?: string; updated?: string }>
       })
-      .then(setText)
-      .catch((e) => setError(e instanceof Error ? e.message : 'Could not load rule book.'))
+      .then((data) => {
+        setMeta({ version: data.version ?? 'Unknown', updated: data.updated ?? 'Unknown' })
+      })
+      .catch((e) => setError(e instanceof Error ? e.message : 'Could not load rule book metadata.'))
   }, [])
 
   return (
     <section className="thallo-rulebook-shell" aria-label="Thallo organisation rule book">
       <div className="portal-info-card wide thallo-rulebook-note">
-        <h3>Organisation Rule Book</h3>
+        <div className="thallo-rulebook-head">
+          <div>
+            <p className="portal-kicker">Canonical company operating document</p>
+            <h3>Organisation Rule Book</h3>
+          </div>
+          <div className="thallo-rulebook-badges" aria-label="Rule book freshness">
+            <span>Version {meta.version}</span>
+            <span>Updated {meta.updated}</span>
+          </div>
+        </div>
         <p>
           Canonical operating document for the Thallo AI company. All agents may read it;
           only Jeff — Thallo CEO may modify it after Benjamin approval.
         </p>
-        <p className="thallo-rulebook-source">Source: /thallo/organisation-rulebook.md · cache bypassed on each open</p>
+        <div className="thallo-rulebook-actions">
+          <a className="portal-submit thallo-rulebook-download" href="/api/thallo/rulebook?format=pdf" target="_blank" rel="noreferrer">
+            Open latest PDF
+          </a>
+          <a className="portal-link-btn" href="/api/thallo/rulebook?format=pdf&download=1" download>
+            Download PDF
+          </a>
+          <a className="portal-link-btn" href="/api/thallo/rulebook?format=markdown" target="_blank" rel="noreferrer">
+            Open audit Markdown
+          </a>
+        </div>
+        <p className="thallo-rulebook-source">
+          PDF and audit Markdown are generated from the same public-safe rulebook copy. Metadata is fetched fresh on each open.
+        </p>
       </div>
-      {error ? <p className="portal-error">{error}</p> : <pre className="thallo-rulebook-text">{text}</pre>}
+      {error && <p className="portal-error">{error}</p>}
     </section>
   )
 }
