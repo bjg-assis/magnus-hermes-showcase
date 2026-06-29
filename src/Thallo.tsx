@@ -434,12 +434,12 @@ function RuleBook() {
   }, [])
 
   return (
-    <section className="thallo-rulebook-shell" aria-label="Thallo organisation rule book">
+    <section className="thallo-rulebook-shell" aria-label="Thallo organisation resources">
       <div className="portal-info-card wide thallo-rulebook-note">
         <div className="thallo-rulebook-head">
           <div>
-            <p className="portal-kicker">Canonical company operating document</p>
-            <h3>Organisation Rule Book</h3>
+            <p className="portal-kicker">Canonical resources and patient documents</p>
+            <h3>Organisation Resources</h3>
           </div>
           <div className="thallo-rulebook-badges" aria-label="Rule book freshness">
             <span>Version {meta.version}</span>
@@ -447,8 +447,8 @@ function RuleBook() {
           </div>
         </div>
         <p>
-          Canonical operating document for the Thallo AI company. All agents may read it;
-          only Jeff — Thallo CEO may modify it after Benjamin approval.
+          Canonical operating documents and patient-facing resources for Thallo. The rule book remains
+          shared-read and Jeff-only-edit after Benjamin approval; patient resources require clinician approval before use.
         </p>
         <div className="thallo-rulebook-actions">
           <a className="portal-submit thallo-rulebook-download" href="/api/thallo/rulebook?format=pdf" target="_blank" rel="noreferrer">
@@ -461,8 +461,16 @@ function RuleBook() {
             Open audit Markdown
           </a>
         </div>
+        <div className="thallo-rulebook-actions">
+          <a className="portal-submit thallo-rulebook-download" href="/thallo/thallo-health-microneedling-aftercare.pdf" target="_blank" rel="noreferrer">
+            Open Microneedling Aftercare PDF
+          </a>
+          <a className="portal-link-btn" href="/thallo/thallo-health-microneedling-aftercare.pdf" download>
+            Download Microneedling Aftercare PDF
+          </a>
+        </div>
         <p className="thallo-rulebook-source">
-          PDF and audit Markdown are generated from the same public-safe rulebook copy. Metadata is fetched fresh on each open.
+          Rule book PDF and audit Markdown are generated from the same public-safe rulebook copy. Patient resources are downloadable PDF assets for clinician-approved use.
         </p>
       </div>
       {error && <p className="portal-error">{error}</p>}
@@ -487,9 +495,9 @@ function ThalloMenu({ onSelect }: { onSelect: (section: ThalloSection) => void }
       </button>
       <button type="button" className="portal-choice portal-thallo" onClick={() => onSelect('rulebook')}>
         <span className="portal-choice-icon"><Icon name="doc" size={26} /></span>
-        <h2>Organisation rule book</h2>
-        <p>Read the canonical company operating rules; shared-read, Jeff-only-edit.</p>
-        <span className="portal-choice-go">Read rule book →</span>
+        <h2>Organisation resources</h2>
+        <p>Read company operating rules and download approved Thallo resource PDFs.</p>
+        <span className="portal-choice-go">Open resources →</span>
       </button>
     </section>
   )
@@ -502,7 +510,7 @@ export function Thallo({ onBack, onLock }: { onBack: () => void; onLock: () => v
     menu: 'Thallo workspace',
     patients: 'Thallo patients',
     org: 'Thallo organisation chart',
-    rulebook: 'Thallo organisation rule book',
+    rulebook: 'Thallo organisation resources',
   }[section]
 
   return (
