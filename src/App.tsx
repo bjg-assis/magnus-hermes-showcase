@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import './App.css'
 import { Dashboards } from './components/Dashboards'
+import { FinanceCockpit } from './components/FinanceCockpit'
 import { NetworkMap } from './components/NetworkMap'
 import { Capabilities, DetailPanel, Journey, LoopRegistry, Personas, StatCard, Workflows } from './components/Panels'
 import { STATS } from './data'
@@ -11,7 +12,7 @@ type Tab = 'network' | 'capabilities' | 'personas' | 'workflows' | 'loops' | 'jo
 /* The showcase and the dashboard selector are sibling views of the Magnus
    surface. Portal keeps rendering <App /> and its dock, so the launcher and
    lock controls stay reachable from either view. */
-type View = 'showcase' | 'dashboards'
+type View = 'showcase' | 'dashboards' | 'finance'
 
 const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'network', label: 'Network' },
@@ -33,7 +34,8 @@ export default function App() {
     stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
-  if (view === 'dashboards') return <Dashboards onBack={() => setView('showcase')} />
+  if (view === 'dashboards') return <Dashboards onBack={() => setView('showcase')} onOpenFinance={() => setView('finance')} />
+  if (view === 'finance') return <FinanceCockpit onBack={() => setView('dashboards')} />
 
   return (
     <div className="shell">

@@ -5,7 +5,7 @@
 import { DASHBOARDS } from '../data'
 import { Icon } from './Icon'
 
-export function Dashboards({ onBack }: { onBack: () => void }) {
+export function Dashboards({ onBack, onOpenFinance }: { onBack: () => void; onOpenFinance: () => void }) {
   return (
     <div className="shell">
       <header className="global-nav">
@@ -56,7 +56,13 @@ export function Dashboards({ onBack }: { onBack: () => void }) {
                   <div className="dashboard-architecture" aria-label={`${d.name} architecture`}>
                     <strong>Architecture</strong>
                     <p>{d.architecture}</p>
-                    <span>{d.launcherLabel ?? 'Open private surface'}</span>
+                    {d.id === 'finances' ? (
+                      <button type="button" className="dashboard-launcher-link" onClick={onOpenFinance}>
+                        {d.launcherLabel ?? 'Open private surface'}
+                      </button>
+                    ) : (
+                      <span>{d.launcherLabel ?? 'Open private surface'}</span>
+                    )}
                   </div>
                 )}
                 {d.privacy && <p className="dashboard-privacy-note">{d.privacy}</p>}
