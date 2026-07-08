@@ -1641,6 +1641,45 @@
   color: color-mix(in srgb, var(--accent) 70%, #1d1d1f);
 }
 
+.dashboard-architecture {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,.76), rgba(221, 250, 235, .52));
+  border: 1px solid rgba(29, 90, 67, .16);
+}
+
+.dashboard-architecture strong {
+  display: block;
+  color: #163f31;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+}
+
+.dashboard-architecture p,
+.dashboard-privacy-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.dashboard-architecture span {
+  display: inline-flex;
+  margin-top: 12px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #183c2f;
+  color: #f7fff9;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-privacy-note {
+  padding: 0 2px;
+}
+
 /* ============ journey ============ */
 #panel-journey .tab-pane {
   padding: clamp(24px, 4vw, 40px);

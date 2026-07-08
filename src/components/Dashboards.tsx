@@ -52,6 +52,14 @@ export function Dashboards({ onBack }: { onBack: () => void }) {
                     <li key={panel}>{panel}</li>
                   ))}
                 </ul>
+                {d.architecture && (
+                  <div className="dashboard-architecture" aria-label={`${d.name} architecture`}>
+                    <strong>Architecture</strong>
+                    <p>{d.architecture}</p>
+                    <span>{d.launcherLabel ?? 'Open private surface'}</span>
+                  </div>
+                )}
+                {d.privacy && <p className="dashboard-privacy-note">{d.privacy}</p>}
               </article>
             ))}
           </div>
@@ -61,11 +69,12 @@ export function Dashboards({ onBack }: { onBack: () => void }) {
               <Icon name="shield" size={24} />
             </span>
             <div>
-              <h3>Nothing is connected yet</h3>
+              <h3>Public shell, private cockpit</h3>
               <p>
-                These are design surfaces, not live readouts. No account, ledger, calendar, repository, or clinical
-                record is wired to this page. Each dashboard will only ever read the sources Benjamin explicitly
-                connects, one at a time, on the same private hardware as the rest of the constellation.
+                The Sterling Finance Cockpit is now a local-private read-only dashboard backed by Sterling’s trusted
+                finance warehouse. This public Magnus surface is deliberately limited to safe architecture, launcher,
+                and status language: no balances, transactions, merchants, subscriptions, liabilities, evidence rows,
+                credentials, or raw finance identifiers are present here.
               </p>
             </div>
           </aside>

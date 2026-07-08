@@ -970,17 +970,23 @@ export interface DashboardCard {
   statusLabel: string
   blurb: string
   panels: string[]
+  architecture?: string
+  privacy?: string
+  launcherLabel?: string
 }
 
 export const DASHBOARDS: DashboardCard[] = [
   {
     id: 'finances',
-    name: 'Personal finances',
+    name: 'Sterling Finance Cockpit',
     icon: 'vault',
     accent: 'green',
-    statusLabel: 'Planned',
-    blurb: 'A single calm view of budgets, commitments, and direction of travel — assembled only from sources Benjamin chooses to connect.',
-    panels: ['Budget overview', 'Spending trends', 'Subscription review'],
+    statusLabel: 'Private cockpit live',
+    blurb: 'A public-safe launcher for the local read-only Sterling finance cockpit. Detailed figures stay on the trusted Mac-side warehouse; Vercel never receives balances, transactions, merchants, income, liabilities, or evidence rows.',
+    panels: ['Private local dashboard', 'Read-only finance warehouse', 'Safe status shell'],
+    architecture: 'Local Sterling sync → local finance warehouse → private cockpit; this public page is only a mirror and launcher.',
+    privacy: 'No raw finance data is bundled or fetched here. Open the private cockpit from trusted hardware or private network access.',
+    launcherLabel: 'Open private cockpit on trusted network',
   },
   {
     id: 'travel',
