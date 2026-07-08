@@ -973,7 +973,6 @@ export interface DashboardCard {
   architecture?: string
   privacy?: string
   launcherLabel?: string
-  launcherUrl?: string
 }
 
 export const DASHBOARDS: DashboardCard[] = [
@@ -986,9 +985,8 @@ export const DASHBOARDS: DashboardCard[] = [
     blurb: 'A public-safe launcher for the local read-only Sterling finance cockpit. Detailed figures stay on the trusted Mac-side warehouse; Vercel never receives balances, transactions, merchants, income, liabilities, or evidence rows.',
     panels: ['Private local dashboard', 'Read-only finance warehouse', 'Safe status shell'],
     architecture: 'Local Sterling sync → local finance warehouse → private cockpit; this public page is only a mirror and launcher.',
-    privacy: 'The public Magnus site links to the authenticated finance cockpit but does not bundle or fetch raw finance figures. Access still requires Sterling Finance login.',
-    launcherLabel: 'Open authenticated finance cockpit',
-    launcherUrl: 'https://finance.imperialresearch.co.uk/finance',
+    privacy: 'No raw finance data is bundled or fetched here. Open the private cockpit from trusted hardware or private network access.',
+    launcherLabel: 'Open private cockpit on trusted network',
   },
   {
     id: 'travel',

@@ -1665,8 +1665,7 @@
   line-height: 1.55;
 }
 
-.dashboard-architecture span,
-.dashboard-architecture .dashboard-launcher-link {
+.dashboard-architecture span {
   display: inline-flex;
   margin-top: 12px;
   padding: 8px 10px;
@@ -1675,7 +1674,6 @@
   color: #f7fff9;
   font-size: 12px;
   font-weight: 800;
-  text-decoration: none;
 }
 
 .dashboard-privacy-note {
