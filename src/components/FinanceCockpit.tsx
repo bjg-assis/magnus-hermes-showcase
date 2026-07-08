@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { type CSSProperties, useEffect, useMemo, useState } from 'react'
 
 type LoadState = 'loading' | 'ready' | 'error'
 type Money = { amount: number; currency: string }
@@ -53,11 +53,69 @@ type Recurring = {
   quality?: Warning[]
 }
 
+type ChartSegment = {
+  id: string
+  label: string
+  kind: 'asset' | 'liability' | 'net_worth' | string
+  value: number
+  signedValue: number
+  currency: string
+  colour: string
+  confidence: 'high' | 'medium' | 'low'
+  caveats: string[]
+}
+
+type BalanceChart = {
+  title: string
+  question: string
+  asOf: string
+  currency: string
+  segments: ChartSegment[]
+  totals: { assets: number; liabilities: number; estimatedNetWorth: number; confidence: 'high' | 'medium' | 'low' }
+  completenessCaveats: string[]
+  dataQualityWarnings: Warning[]
+  definition: string
+  adviceBoundary: string
+}
+
+type MonthlyCashflowPoint = {
+  month: string
+  label: string
+  ordinaryIncome: number
+  ordinarySpending: number
+  ordinaryNetCashflow: number
+  assetSaleProceeds: number
+  reimbursementsAndAdminExcluded: number
+  excludedTransfers: number
+  currency: string
+  isPartial: boolean
+  warnings: string[]
+}
+
+type MonthlyCashflowChart = {
+  title: string
+  question: string
+  windowMonths: number
+  startMonth: string
+  endMonth: string
+  currency: string
+  series: MonthlyCashflowPoint[]
+  definition: string
+  exclusions: string[]
+  dataQualityWarnings: Warning[]
+  caveats: string[]
+}
+
 type Balance = {
+  chart?: BalanceChart
   totals?: { assets?: Money[]; liabilities?: Money[]; netWorth?: Money[]; confidence?: string }
   runway?: { months?: number | null; coreMonthlyExpense?: Money[]; cashAndEquivalents?: Money[]; trailingMonths?: number; confidence?: string; caveats?: string[] }
   completeness?: Record<string, boolean>
   dataQuality?: Warning[]
+}
+
+type Cashflow = {
+  monthlyChart?: MonthlyCashflowChart
 }
 
 const currency = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 })
@@ -94,6 +152,125 @@ function completenessLabel(key: string) {
   return key.replace(/^has/, '').replace(/[A-Z]/g, (m) => ` ${m.toLowerCase()}`).trim()
 }
 
+function formatSigned(amount: number, code = 'GBP') {
+  const prefix = amount > 0 ? '+' : ''
+  return `${prefix}${money(amount, code)}`
+}
+
+function safeRatio(value: number, max: number, floor = 3) {
+  if (!max) return floor
+  return Math.max(floor, Math.min(100, Math.round((Math.abs(value) / max) * 100)))
+}
+
+function BalanceSheetChartPanel({ chart }: { chart?: BalanceChart }) {
+  if (!chart) return null
+  const assetSegments = chart.segments.filter((segment) => segment.kind === 'asset')
+  const liability = chart.segments.find((segment) => segment.kind === 'liability')
+  const maxMagnitude = Math.max(chart.totals.assets, chart.totals.liabilities, Math.abs(chart.totals.estimatedNetWorth), 1)
+  const caveats = [...(chart.completenessCaveats ?? []), ...(chart.dataQualityWarnings ?? []).map((w) => w.title ?? w.detail ?? '')].filter(Boolean).slice(0, 4)
+
+  return (
+    <section className="finance-panel chart-panel wealth-chart-panel">
+      <div className="chart-panel-heading">
+        <div>
+          <p className="eyebrow">Balance sheet = current wealth</p>
+          <h3>{chart.title}</h3>
+          <p>{chart.question}</p>
+        </div>
+        <span className={`confidence-badge ${chart.totals.confidence}`}>{chart.totals.confidence} confidence</span>
+      </div>
+
+      <div className="wealth-totals">
+        <article><span>Assets</span><strong>{money(chart.totals.assets, chart.currency)}</strong></article>
+        <article><span>Liabilities</span><strong>{money(chart.totals.liabilities, chart.currency)}</strong></article>
+        <article className="net-worth-total"><span>Estimated net worth</span><strong>{money(chart.totals.estimatedNetWorth, chart.currency)}</strong></article>
+      </div>
+
+      <div className="wealth-bars" aria-label="Balance sheet current wealth chart">
+        {assetSegments.map((segment) => (
+          <div className="wealth-bar-row" key={segment.id}>
+            <span>{segment.label}</span>
+            <div className="wealth-bar-track"><div className="wealth-bar asset" style={{ width: `${safeRatio(segment.value, maxMagnitude)}%`, background: segment.colour }} /></div>
+            <strong>{money(segment.value, segment.currency)}</strong>
+          </div>
+        ))}
+        {liability && (
+          <div className="wealth-bar-row liability-row">
+            <span>{liability.label}</span>
+            <div className="wealth-bar-track"><div className="wealth-bar liability" style={{ width: `${safeRatio(liability.value, maxMagnitude)}%`, background: liability.colour }} /></div>
+            <strong>-{money(liability.value, liability.currency)}</strong>
+          </div>
+        )}
+        <div className="wealth-net-marker" style={{ '--net-position': `${safeRatio(chart.totals.estimatedNetWorth, maxMagnitude, 8)}%` } as CSSProperties}>
+          <span>Net worth marker</span>
+          <strong>{money(chart.totals.estimatedNetWorth, chart.currency)}</strong>
+        </div>
+      </div>
+
+      {caveats.length > 0 && (
+        <div className="chart-caveats">
+          {caveats.map((caveat) => <span key={caveat}>{caveat}</span>)}
+        </div>
+      )}
+      <p className="chart-definition">{chart.definition}</p>
+      <p className="chart-boundary">{chart.adviceBoundary}</p>
+    </section>
+  )
+}
+
+function CashflowChartPanel({ chart }: { chart?: MonthlyCashflowChart }) {
+  if (!chart) return null
+  const maxMagnitude = Math.max(...chart.series.flatMap((point) => [point.ordinaryIncome, point.ordinarySpending, Math.abs(point.ordinaryNetCashflow)]), 1)
+  const warnings = [...(chart.dataQualityWarnings ?? []).map((w) => w.title ?? w.detail ?? ''), ...chart.series.flatMap((point) => point.warnings.map((warning) => `${point.label}: ${warning}`))].filter(Boolean).slice(0, 5)
+
+  return (
+    <section className="finance-panel chart-panel cashflow-chart-panel">
+      <div className="chart-panel-heading">
+        <div>
+          <p className="eyebrow">Cashflow = direction of travel</p>
+          <h3>{chart.title}</h3>
+          <p>{chart.question}</p>
+        </div>
+        <span className="confidence-badge info">{chart.windowMonths} months</span>
+      </div>
+
+      <div className="cashflow-chart" aria-label="Monthly cashflow direction of travel chart">
+        {chart.series.map((point) => (
+          <div className={`cashflow-month ${point.isPartial ? 'partial' : ''}`} key={point.month} title={`${point.label}: net ${formatSigned(point.ordinaryNetCashflow, point.currency)}`}>
+            <div className="cashflow-bars">
+              <div className="cashflow-positive" style={{ height: `${safeRatio(point.ordinaryIncome, maxMagnitude, 2)}%` }} />
+              <div className="cashflow-net-dot" style={{ bottom: `${safeRatio(point.ordinaryNetCashflow, maxMagnitude, 8)}%` }} />
+              <div className="cashflow-negative" style={{ height: `${safeRatio(point.ordinarySpending, maxMagnitude, 2)}%` }} />
+            </div>
+            <span>{point.label}</span>
+            {(point.warnings.length > 0 || point.assetSaleProceeds || point.reimbursementsAndAdminExcluded || point.excludedTransfers) ? <em aria-label="Month has annotations">•</em> : null}
+          </div>
+        ))}
+      </div>
+
+      <div className="cashflow-legend">
+        <span><i className="income" /> Ordinary income</span>
+        <span><i className="spend" /> Ordinary spending</span>
+        <span><i className="net" /> Net cashflow</span>
+        <span><i className="partial" /> Partial month</span>
+      </div>
+
+      <div className="cashflow-snapshot">
+        {chart.series.slice(-3).map((point) => (
+          <article key={point.month}>
+            <span>{point.label}</span>
+            <strong>{formatSigned(point.ordinaryNetCashflow, point.currency)}</strong>
+            <small>Income {money(point.ordinaryIncome, point.currency)} · Spend {money(point.ordinarySpending, point.currency)}</small>
+          </article>
+        ))}
+      </div>
+
+      {warnings.length > 0 && <div className="chart-caveats">{warnings.map((warning) => <span key={warning}>{warning}</span>)}</div>}
+      <p className="chart-definition">{chart.definition}</p>
+    </section>
+  )
+}
+
 export function FinanceCockpit({ onBack }: { onBack: () => void }) {
   const [state, setState] = useState<LoadState>('loading')
   const [error, setError] = useState('')
@@ -102,6 +279,7 @@ export function FinanceCockpit({ onBack }: { onBack: () => void }) {
   const [freshness, setFreshness] = useState<Freshness | null>(null)
   const [recurring, setRecurring] = useState<Recurring | null>(null)
   const [balance, setBalance] = useState<Balance | null>(null)
+  const [cashflow, setCashflow] = useState<Cashflow | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -109,12 +287,13 @@ export function FinanceCockpit({ onBack }: { onBack: () => void }) {
       setState('loading')
       setError('')
       try {
-        const [summaryData, reviewData, freshnessData, recurringData, balanceData] = await Promise.all([
+        const [summaryData, reviewData, freshnessData, recurringData, balanceData, cashflowData] = await Promise.all([
           loadJson<Summary>('/api/finance/summary'),
           loadJson<ReviewQueue>('/api/finance/review-queue'),
           loadJson<Freshness>('/api/finance/audit/source-freshness'),
           loadJson<Recurring>('/api/finance/regular-expenses'),
           loadJson<Balance>('/api/finance/balance-sheet'),
+          loadJson<Cashflow>('/api/finance/cash-flow?months=12'),
         ])
         if (!cancelled) {
           setSummary(summaryData)
@@ -122,6 +301,7 @@ export function FinanceCockpit({ onBack }: { onBack: () => void }) {
           setFreshness(freshnessData)
           setRecurring(recurringData)
           setBalance(balanceData)
+          setCashflow(cashflowData)
           setState('ready')
         }
       } catch (err) {
@@ -196,6 +376,11 @@ export function FinanceCockpit({ onBack }: { onBack: () => void }) {
               <article><span>Runway</span><strong>{kpis?.cashRunwayMonths == null ? '—' : `${kpis.cashRunwayMonths} mo`}</strong><small>{kpis?.cashRunway?.trailingMonths ?? balance?.runway?.trailingMonths ?? '—'} trailing months</small></article>
               <article><span>Review tasks</span><strong>{review?.summary?.taskCount ?? summary.reviewCounts?.reviewTasks ?? 0}</strong><small>{review?.summary?.distinctTransactionCount ?? summary.reviewCounts?.distinctTransactions ?? 0} transactions</small></article>
             </div>
+          </section>
+
+          <section className="finance-chart-hero-row" aria-label="Primary finance charts">
+            <BalanceSheetChartPanel chart={balance?.chart} />
+            <CashflowChartPanel chart={cashflow?.monthlyChart} />
           </section>
 
           <section className="finance-panel finance-wide">
