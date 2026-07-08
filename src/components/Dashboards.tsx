@@ -56,7 +56,13 @@ export function Dashboards({ onBack }: { onBack: () => void }) {
                   <div className="dashboard-architecture" aria-label={`${d.name} architecture`}>
                     <strong>Architecture</strong>
                     <p>{d.architecture}</p>
-                    <span>{d.launcherLabel ?? 'Open private surface'}</span>
+                    {d.launcherUrl ? (
+                      <a className="dashboard-launcher-link" href={d.launcherUrl} target="_blank" rel="noreferrer">
+                        {d.launcherLabel ?? 'Open private surface'}
+                      </a>
+                    ) : (
+                      <span>{d.launcherLabel ?? 'Open private surface'}</span>
+                    )}
                   </div>
                 )}
                 {d.privacy && <p className="dashboard-privacy-note">{d.privacy}</p>}
