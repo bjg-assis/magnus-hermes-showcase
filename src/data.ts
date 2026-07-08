@@ -850,6 +850,185 @@ export const JOURNEY: JourneyStep[] = [
   },
 ]
 
+/* ---------- Loop registry ----------
+   The recurring operating loops, described at product level: what runs, how
+   often, who owns it, where the result lands, and what it may never do.
+   Descriptive only — no schedules-as-configuration, credentials, or payloads. */
+
+export type LoopStatus = 'running' | 'scheduled' | 'planned'
+
+export interface LoopEntry {
+  id: string
+  name: string
+  cadence: string
+  owner: string
+  surface: string
+  status: LoopStatus
+  statusLabel: string
+  summary: string
+  guardrail: string
+  accent: Accent
+}
+
+export const LOOPS: LoopEntry[] = [
+  {
+    id: 'morning-briefing',
+    name: 'Morning Briefing',
+    cadence: 'Daily · before breakfast',
+    owner: 'Magnus / Nestor',
+    surface: 'Telegram',
+    status: 'running',
+    statusLabel: 'Running',
+    summary: 'Gathers weather, calendar, and overnight signals, filters the noise, and returns one short plan for the day.',
+    guardrail: 'Reads and summarises only — never sends messages or moves appointments on Benjamin’s behalf.',
+    accent: 'ice',
+  },
+  {
+    id: 'diary-context',
+    name: 'Diary & recent context',
+    cadence: 'Daily',
+    owner: 'Nestor / Obsidian',
+    surface: 'Obsidian vault',
+    status: 'running',
+    statusLabel: 'Running',
+    summary: 'Threads the last few days of notes and decisions into the vault so the next conversation starts with memory.',
+    guardrail: 'Stays on Benjamin’s own hardware. Nothing leaves the private mesh.',
+    accent: 'green',
+  },
+  {
+    id: 'integration-watchdog',
+    name: 'Integration health watchdog',
+    cadence: 'Hourly',
+    owner: 'Magnus',
+    surface: 'Telegram — only on failure',
+    status: 'running',
+    statusLabel: 'Running',
+    summary: 'Probes the integrations layer, stays silent while healthy, and speaks up before a quiet failure breaks a larger workflow.',
+    guardrail: 'Alerts only. Restarts and repairs stay behind an explicit human gate.',
+    accent: 'amber',
+  },
+  {
+    id: 'dashboard-watchdog',
+    name: 'Dashboard watchdog',
+    cadence: 'Every quarter hour',
+    owner: 'Boris',
+    surface: 'Telegram — only on failure',
+    status: 'running',
+    statusLabel: 'Running',
+    summary: 'Checks that the deployed surfaces are actually answering, so an outage is caught long before someone notices it by hand.',
+    guardrail: 'Read-only probes against public endpoints. No deploys, no rollbacks.',
+    accent: 'cyan',
+  },
+  {
+    id: 'full-system-update',
+    name: 'Full System Update',
+    cadence: 'Weekly · overnight',
+    owner: 'Boris / Magnus',
+    surface: 'Telegram evidence report',
+    status: 'scheduled',
+    statusLabel: 'Scheduled',
+    summary: 'The estate-hardening loop: back up, update deliberately, verify gateways and key integrations, then report evidence and rollback notes.',
+    guardrail: 'Local work is preserved. Anything irreversible is proposed, not performed.',
+    accent: 'rose',
+  },
+  {
+    id: 'agentic-ai-law-watch',
+    name: 'Agentic AI Legal Watch',
+    cadence: 'Weekly',
+    owner: 'Harvey',
+    surface: 'Telegram digest',
+    status: 'scheduled',
+    statusLabel: 'Scheduled',
+    summary: 'Tracks UK and EU movement on agentic-AI law and returns a short digest of what changed and what it might mean.',
+    guardrail: 'Research and drafting only. No filings, no external correspondence.',
+    accent: 'ice',
+  },
+  {
+    id: 'dashboard-digest',
+    name: 'Dashboard digest',
+    cadence: 'Not yet wired',
+    owner: 'Magnus',
+    surface: 'Ben’s Dashboards',
+    status: 'planned',
+    statusLabel: 'Planned',
+    summary: 'The loop that will keep the personal dashboards current — folding each surface’s latest state into one glanceable summary.',
+    guardrail: 'Will read only sources Benjamin explicitly connects, one surface at a time.',
+    accent: 'green',
+  },
+]
+
+/* ---------- Ben’s Dashboards ----------
+   Selection surface only. Every card below is future-facing product framing:
+   nothing here reads live data, and no personal, financial, or clinical
+   records are present in this showcase. */
+
+export interface DashboardCard {
+  id: string
+  name: string
+  icon: string
+  accent: Accent
+  statusLabel: string
+  blurb: string
+  panels: string[]
+}
+
+export const DASHBOARDS: DashboardCard[] = [
+  {
+    id: 'finances',
+    name: 'Personal finances',
+    icon: 'vault',
+    accent: 'green',
+    statusLabel: 'Planned',
+    blurb: 'A single calm view of budgets, commitments, and direction of travel — assembled only from sources Benjamin chooses to connect.',
+    panels: ['Budget overview', 'Spending trends', 'Subscription review'],
+  },
+  {
+    id: 'travel',
+    name: 'Travel',
+    icon: 'globe',
+    accent: 'ice',
+    statusLabel: 'Planned',
+    blurb: 'Trips from idea to itinerary: where to go next, what is already booked, and what still needs a decision.',
+    panels: ['Upcoming trips', 'Itinerary drafts', 'Places to return to'],
+  },
+  {
+    id: 'research',
+    name: 'Research',
+    icon: 'book',
+    accent: 'cyan',
+    statusLabel: 'Planned',
+    blurb: 'The Professor’s output, made durable — open questions, source-backed answers, and the reading queue behind them.',
+    panels: ['Open questions', 'Recent syntheses', 'Reading queue'],
+  },
+  {
+    id: 'surgical-training',
+    name: 'Surgical training',
+    icon: 'heart',
+    accent: 'rose',
+    statusLabel: 'Planned',
+    blurb: 'Progress against the training curriculum: milestones reached, courses ahead, and evidence still to gather.',
+    panels: ['Curriculum milestones', 'Courses & exams', 'Portfolio evidence'],
+  },
+  {
+    id: 'coding-projects',
+    name: 'Coding projects',
+    icon: 'terminal',
+    accent: 'amber',
+    statusLabel: 'Planned',
+    blurb: 'What Boris is building: active repositories, OrcaForge runs in flight, and the health of everything already shipped.',
+    panels: ['Active repositories', 'OrcaForge runs', 'Build & deploy health'],
+  },
+  {
+    id: 'todo',
+    name: 'General to-do list',
+    icon: 'files',
+    accent: 'cyan',
+    statusLabel: 'Planned',
+    blurb: 'Everything captured but not yet done, ordered by what actually matters this week rather than what shouted loudest.',
+    panels: ['This week', 'Waiting on someone', 'Someday / maybe'],
+  },
+]
+
 export const STATS = [
   { label: 'Tools', value: TOOLS.length, hint: 'hands-on capabilities' },
   { label: 'Skills', value: SKILLS.length, hint: 'reusable playbooks' },

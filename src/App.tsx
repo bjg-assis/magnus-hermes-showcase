@@ -1,22 +1,30 @@
 import { useRef, useState } from 'react'
 import './App.css'
+import { Dashboards } from './components/Dashboards'
 import { NetworkMap } from './components/NetworkMap'
-import { Capabilities, DetailPanel, Journey, Personas, StatCard, Workflows } from './components/Panels'
+import { Capabilities, DetailPanel, Journey, LoopRegistry, Personas, StatCard, Workflows } from './components/Panels'
 import { STATS } from './data'
 import type { NodeId } from './data'
 
-type Tab = 'network' | 'capabilities' | 'personas' | 'workflows' | 'journey'
+type Tab = 'network' | 'capabilities' | 'personas' | 'workflows' | 'loops' | 'journey'
+
+/* The showcase and the dashboard selector are sibling views of the Magnus
+   surface. Portal keeps rendering <App /> and its dock, so the launcher and
+   lock controls stay reachable from either view. */
+type View = 'showcase' | 'dashboards'
 
 const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'network', label: 'Network' },
   { id: 'capabilities', label: 'Capabilities' },
   { id: 'personas', label: 'Personas' },
   { id: 'workflows', label: 'Workflows' },
+  { id: 'loops', label: 'Loop Registry' },
   { id: 'journey', label: 'Journey' },
 ]
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('network')
+  const [view, setView] = useState<View>('showcase')
   const [selected, setSelected] = useState<NodeId>('magnus')
   const stageRef = useRef<HTMLElement>(null)
 
@@ -24,6 +32,8 @@ export default function App() {
     setTab(t)
     stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+
+  if (view === 'dashboards') return <Dashboards onBack={() => setView('showcase')} />
 
   return (
     <div className="shell">
@@ -64,6 +74,9 @@ export default function App() {
           </button>
           <button type="button" className="cta-pill secondary" onClick={() => goTo('personas')}>
             See what changed
+          </button>
+          <button type="button" className="cta-pill tertiary" onClick={() => setView('dashboards')}>
+            Ben’s Dashboards
           </button>
         </div>
         <div className="stat-row">
@@ -110,6 +123,11 @@ export default function App() {
         {tab === 'workflows' && (
           <section id="panel-workflows" role="tabpanel" aria-labelledby="tab-workflows">
             <Workflows />
+          </section>
+        )}
+        {tab === 'loops' && (
+          <section id="panel-loops" role="tabpanel" aria-labelledby="tab-loops">
+            <LoopRegistry />
           </section>
         )}
         {tab === 'journey' && (

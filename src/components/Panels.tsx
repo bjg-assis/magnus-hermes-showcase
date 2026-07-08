@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { JOURNEY, MODELS, NODES, PERSONAS, SKILLS, TOOLS, UPGRADES, WORKFLOW_CATEGORIES, WORKFLOWS } from '../data'
+import { JOURNEY, LOOPS, MODELS, NODES, PERSONAS, SKILLS, TOOLS, UPGRADES, WORKFLOW_CATEGORIES, WORKFLOWS } from '../data'
 import type { NodeId } from '../data'
 import { Icon } from './Icon'
 
@@ -325,6 +325,67 @@ export function Workflows() {
           </p>
         </aside>
       </div>
+    </div>
+  )
+}
+
+/* ---------- Loop registry tab ---------- */
+
+export function LoopRegistry() {
+  return (
+    <div className="tab-pane">
+      <header className="section-head wide">
+        <span className="section-label">Loop registry</span>
+        <h2>Every recurring loop, on one page</h2>
+        <p>
+          A workflow is a playbook. A loop is a playbook that has been given a clock. The registry is the honest
+          answer to &ldquo;what is this system doing while nobody is watching?&rdquo; — what runs, how often, who owns
+          it, where the result lands, and what it is never allowed to do.
+        </p>
+      </header>
+
+      <div className="loop-grid">
+        {LOOPS.map((loop, i) => (
+          <article
+            className={`loop-card accent-${loop.accent} rise`}
+            key={loop.id}
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <div className="loop-card-top">
+              <span className="loop-cadence">
+                <Icon name="clock" size={15} />
+                {loop.cadence}
+              </span>
+              <span className={`loop-status loop-status-${loop.status}`}>
+                <span className="status-dot" aria-hidden="true" />
+                {loop.statusLabel}
+              </span>
+            </div>
+            <h3>{loop.name}</h3>
+            <p className="loop-summary">{loop.summary}</p>
+            <dl className="loop-meta">
+              <div>
+                <dt>Owner</dt>
+                <dd>{loop.owner}</dd>
+              </div>
+              <div>
+                <dt>Lands in</dt>
+                <dd>{loop.surface}</dd>
+              </div>
+            </dl>
+            <p className="loop-guardrail">
+              <Icon name="shield" size={14} />
+              {loop.guardrail}
+            </p>
+          </article>
+        ))}
+      </div>
+
+      <p className="loop-note">
+        Public-safe summary. Cadences are described in plain language rather than as live schedules, and the registry
+        never carries credentials, payloads, private data, or PHI — those stay behind the same explicit gates as the
+        workflows that use them.
+      </p>
     </div>
   )
 }
