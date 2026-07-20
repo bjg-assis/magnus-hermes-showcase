@@ -144,7 +144,7 @@ function Launcher({ onSelect, onLock }: { onSelect: (view: View) => void; onLock
               <Icon name="hub" size={26} />
             </span>
             <h2>Magnus</h2>
-            <p>The private multi-agent AI operating system — the interactive showcase across three Macs, Home Assistant, and the operations layer.</p>
+            <p>The private multi-agent AI operating system — the interactive showcase across the Mac estate, Home Assistant, and the operations layer.</p>
             <span className="portal-choice-go">Open showcase →</span>
           </button>
 

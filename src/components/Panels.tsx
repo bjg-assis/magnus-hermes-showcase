@@ -102,7 +102,7 @@ export function Capabilities() {
           <article className="system-card rise" style={{ animationDelay: '120ms' }}>
             <span className="system-kicker">Intelligence</span>
             <h3>Model-agnostic by design</h3>
-            <p>Claude, GPT/Codex, Grok, OpenRouter, and future models can be routed per task instead of locking the system to one lab.</p>
+            <p>GPT-5.6 Sol leads demanding planning, build, and review work; Claude, Grok, local fallbacks, and future models are capability-gated alternatives rather than an automatic chain.</p>
           </article>
           <article className="system-card rise" style={{ animationDelay: '180ms' }}>
             <span className="system-kicker">Execution</span>

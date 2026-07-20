@@ -191,11 +191,11 @@ export const NODES: MapNode[] = [
     accent: 'cyan',
     icon: 'forge',
     satellite: true,
-    facts: ['Linked to Boris', 'Claude Opus builder lane', 'Codex review', 'Audit trail + deploy gate'],
+    facts: ['Linked to Boris', 'GPT-5.6 Sol lead lane', 'Separate Sol review', 'Audit trail + deploy gate'],
     body: [
-      'OrcaForge is Boris’s high-power coding cockpit: mission brief, isolated worktrees, Claude Opus implementation, agent-swarm subtasks, Codex review, and independent Boris verification.',
+      'OrcaForge is Boris’s high-power coding cockpit: mission brief, isolated worktrees, GPT-5.6 Sol implementation, bounded agent-swarm subtasks where useful, a separate Sol review pass, and independent Boris verification.',
       'It is how an idea becomes a working artifact with an audit trail — not just a model claiming it is done.',
-      'Recent launches use it as the disciplined path from Telegram request to local proof, public deployment, live smoke test, and rollback-aware handover.',
+      'Other models are capability-gated exceptions, not an automatic chain. Recent launches use the forge as the disciplined path from request to local proof, deployment gate, live smoke test, and rollback-aware handover.',
     ],
   },
   {
@@ -405,7 +405,7 @@ export const UPGRADES: UpgradeCard[] = [
   {
     name: 'OrcaForge build cockpit',
     eyebrow: 'Multi-agent engineering',
-    blurb: 'Serious builds now move through a disciplined forge: mission brief, isolated worktrees, Claude implementation, Codex review, browser smoke tests, and Boris sign-off.',
+    blurb: 'Serious builds now move through a disciplined forge: mission brief, isolated worktrees, GPT-5.6 Sol implementation and review, browser smoke tests, and Boris sign-off.',
     proof: 'From Telegram request to deployed public app with evidence',
     accent: 'amber',
   },
@@ -440,7 +440,7 @@ export const SKILLS: SkillCard[] = [
   { name: 'Build & Ship', blurb: 'Take a software idea from sketch to working, tested code.' },
   { name: 'Full System Update', blurb: 'Weekly overnight estate maintenance: backups, safe updates, gateway restarts, parity audits, and rollback notes.' },
   { name: 'AI Worker', blurb: 'Boris’s background workbench for scoped scripts, checks, builds, and repeatable execution loops.' },
-  { name: 'OrcaForge', blurb: 'Boris’s multi-agent software forge: worktrees, Claude implementation, Codex review, and verified handoff.' },
+  { name: 'OrcaForge', blurb: 'Boris’s multi-agent software forge: visible worktrees, GPT-5.6 Sol implementation and review, and verified handoff.' },
   { name: 'Inbox Triage', blurb: 'Sort the important from the ignorable and draft the replies.' },
   { name: 'Watchkeeper', blurb: 'Monitor pages and feeds; speak up only when something truly changes.' },
   { name: 'Trip Planner', blurb: 'Turn "somewhere nice this weekend?" into a full itinerary.' },
@@ -519,8 +519,8 @@ export const WORKFLOWS: WorkflowCard[] = [
     command: '/orca_forge',
     category: 'software',
     owner: 'Boris',
-    summary: 'The high-power software forge: visible Orca cockpit, Claude implementation, Codex review, Boris verification.',
-    detail: 'Used for serious builds where Benjamin should be able to watch the engineering cockpit and where push, deploy, migration, or paid-model gates stay explicit.',
+    summary: 'The high-power software forge: visible Orca cockpit, GPT-5.6 Sol implementation and review, Boris verification.',
+    detail: 'Used for serious builds where Benjamin should be able to watch the engineering cockpit, capability-based model exceptions must be justified, and push, deploy, migration, or paid-model gates stay explicit.',
     steps: ['Mission brief', 'Visible builder lane', 'Adversarial review', 'Verify & deploy gate'],
     accent: 'cyan',
   },
@@ -655,11 +655,10 @@ export interface ModelCartridge {
 }
 
 export const MODELS: ModelCartridge[] = [
-  { name: 'Opus 4.8', maker: 'Anthropic', vibe: 'Primary coding builder in Claude Code', accent: 'cyan' },
-  { name: 'GPT-5.5 / Codex', maker: 'OpenAI', vibe: 'Adversarial code review and repair', accent: 'rose' },
-  { name: 'Sonnet', maker: 'Anthropic', vibe: 'The everyday workhorse', accent: 'green' },
-  { name: 'Grok', maker: 'xAI', vibe: 'Fast spikes, current docs, alternate takes', accent: 'amber' },
-  { name: 'OpenRouter', maker: 'Model mesh', vibe: 'Model-agnostic routing and Fusion plans', accent: 'ice' },
+  { name: 'GPT-5.6 Sol', maker: 'OpenAI', vibe: 'Preferred planning, implementation, and review engine', accent: 'cyan' },
+  { name: 'Grok 4.5', maker: 'xAI', vibe: 'Role-specific specialist and fast alternate lane', accent: 'amber' },
+  { name: 'GLM-5.2', maker: 'Ollama Cloud', vibe: 'Estate fallback for resilient operation', accent: 'green' },
+  { name: 'DeepSeek V4 Flash', maker: 'Ollama Cloud', vibe: 'Private laptop specialist routing', accent: 'rose' },
 ]
 
 export interface Persona {
@@ -823,14 +822,14 @@ export const JOURNEY: JourneyStep[] = [
   {
     num: '03',
     title: 'The right mind is chosen',
-    text: 'A model is slotted in like an engine cartridge: Claude for long coding runs, GPT/Codex for adversarial review, Grok for fast spikes, or OpenRouter for model-agnostic routing.',
+    text: 'A model is slotted in like an engine cartridge: GPT-5.6 Sol leads planning, building, and review; Grok or local fallbacks are selected only for a role-specific capability or availability need.',
     icon: 'cartridge',
     accent: 'amber',
   },
   {
     num: '04',
     title: 'Boris can forge the build',
-    text: 'For engineering, Magnus wakes Boris. Boris can invoke AI Worker for bounded background jobs or OrcaForge for the full Claude-build, Codex-review, verified-deploy pipeline.',
+    text: 'For engineering, Magnus wakes Boris. Boris can invoke AI Worker for bounded background jobs or OrcaForge for the full Sol-led build, adversarial review, and verified-deploy pipeline.',
     icon: 'wrench',
     accent: 'green',
   },

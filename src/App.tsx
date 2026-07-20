@@ -66,7 +66,7 @@ export default function App() {
           Magnus — private AI mission control, now with an operations layer
         </h1>
         <p className="hero-sub">
-          A private AI constellation across three Macs and Home Assistant: Magnus coordinates, specialists execute,
+          A private AI constellation across the Mac estate and Home Assistant: Magnus coordinates, specialists execute,
           Boris forges builds, weekly maintenance keeps the estate current, and every result comes back through one
           accountable Telegram hub.
         </p>
