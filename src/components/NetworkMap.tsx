@@ -15,9 +15,13 @@ const MAGNUS_SATELLITE_ANGLES: Record<string, number> = {
   boris: 180,
   sterling: 230,
   professor: 278,
-  harvey: 316,
   surgeons: 348,
   aegis: 38,
+}
+
+const MACPRO_SATELLITE_ANGLES: Record<string, number> = {
+  thor: 210,
+  harvey: 330,
 }
 
 const BORIS_SKILL_ANGLES: Record<string, number> = {
@@ -26,8 +30,10 @@ const BORIS_SKILL_ANGLES: Record<string, number> = {
 }
 
 const ORBIT_R = 122
+const MACPRO_ORBIT_R = 58
 const BORIS_SKILL_ORBIT_R = 56
 const HUB = { x: 500, y: 350 }
+const MACPRO = { x: 885, y: 350 }
 
 const pointOnOrbit = (origin: { x: number; y: number }, radius: number, angleDeg: number) => {
   const angle = (angleDeg * Math.PI) / 180
@@ -64,6 +70,7 @@ export function NetworkMap({ selected, onSelect }: Props) {
 
   const mainNodes = useMemo(() => NODES.filter((n) => !n.satellite), [])
   const magnusSatellites = useMemo(() => NODES.filter((n) => n.satellite && n.id in MAGNUS_SATELLITE_ANGLES), [])
+  const macproSatellites = useMemo(() => NODES.filter((n) => n.satellite && n.id in MACPRO_SATELLITE_ANGLES), [])
   const borisSkillNodes = useMemo(() => NODES.filter((n) => n.satellite && n.id in BORIS_SKILL_ANGLES), [])
   const borisPoint = pointOnOrbit(HUB, ORBIT_R, MAGNUS_SATELLITE_ANGLES.boris)
 
@@ -158,6 +165,9 @@ export function NetworkMap({ selected, onSelect }: Props) {
           <text x="696" y="224" className="tunnel-label" transform="rotate(-25 696 224)">
             tailscale · secure orbit
           </text>
+          <text x="720" y="342" className="tunnel-label">
+            tailscale · secure orbit
+          </text>
           <text x="696" y="520" className="tunnel-label" transform="rotate(22 696 520)">
             tailscale · secure orbit
           </text>
@@ -177,6 +187,32 @@ export function NetworkMap({ selected, onSelect }: Props) {
                 selected={selected === n.id}
                 dim={isDim(n.id)}
                 onSelect={onSelect}
+              />
+            )
+          })}
+        </g>
+
+        {/* Mac Pro worker satellites */}
+        <circle cx={MACPRO.x} cy={MACPRO.y} r={MACPRO_ORBIT_R} className="orbit-ring skill-orbit-ring" aria-hidden="true" />
+        <g className="skill-link-group" aria-hidden="true">
+          {macproSatellites.map((n) => {
+            const { x: sx, y: sy } = pointOnOrbit(MACPRO, MACPRO_ORBIT_R, MACPRO_SATELLITE_ANGLES[n.id])
+            return <line key={n.id} x1={MACPRO.x} y1={MACPRO.y} x2={sx} y2={sy} className="skill-link" />
+          })}
+        </g>
+        <g className="orbit-group skill-orbit-group">
+          {macproSatellites.map((n) => {
+            const { x: sx, y: sy } = pointOnOrbit(MACPRO, MACPRO_ORBIT_R, MACPRO_SATELLITE_ANGLES[n.id])
+            return (
+              <SatelliteNode
+                key={n.id}
+                node={n}
+                x={sx}
+                y={sy}
+                selected={selected === n.id}
+                dim={isDim(n.id)}
+                onSelect={onSelect}
+                compact
               />
             )
           })}

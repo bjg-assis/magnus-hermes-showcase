@@ -6,6 +6,7 @@ export type NodeId =
   | 'telegram'
   | 'magnus'
   | 'apollo'
+  | 'macpro'
   | 'nestor'
   | 'obsidian'
   | 'homeassistant'
@@ -13,6 +14,7 @@ export type NodeId =
   | 'boris'
   | 'sterling'
   | 'professor'
+  | 'thor'
   | 'harvey'
   | 'surgeons'
   | 'aegis'
@@ -83,6 +85,22 @@ export const NODES: MapNode[] = [
       'Apollo is a second Mac mini that lives on the same private network, reached through a secure Tailscale tunnel — a glowing private wire that only these machines can use.',
       'When Magnus has long or heavy work — big research jobs, code builds, batch tasks — Apollo takes it on so the hub stays fast and responsive.',
       'It now participates in the same safe update pipeline as the hub: backup first, promote only verified commits, then prove the gateway is alive.',
+    ],
+  },
+  {
+    id: 'macpro',
+    name: 'Mac Pro',
+    role: 'Linux worker · Thor + Harvey',
+    x: 885,
+    y: 350,
+    r: 44,
+    accent: 'amber',
+    icon: 'worker',
+    facts: ['Always-on Linux worker', 'Thor + Harvey gateways', 'Private Tailscale mesh', 'Mirrors verified Hermes updates'],
+    body: [
+      'The Mac Pro is the estate’s always-on Linux worker: a separate machine for infrastructure, scanners, scheduled services, and parallel execution.',
+      'Thor runs the general infrastructure lane while Harvey provides UK legal strategy. Both stay on the same verified Hermes commit set as the Mac minis and laptop.',
+      'Weekly maintenance checks both gateways, Telegram connectivity, service supervision, load, and Home Assistant reachability without hiding host-level issues behind application health.',
     ],
   },
   {
@@ -231,12 +249,28 @@ export const NODES: MapNode[] = [
     ],
   },
   {
-    id: 'harvey',
-    name: 'Harvey',
-    role: 'Standby specialist · UK legal counsel',
+    id: 'thor',
+    name: 'Thor',
+    role: 'Mac Pro worker · infrastructure',
     x: 0,
     y: 0,
-    r: 20,
+    r: 18,
+    accent: 'green',
+    icon: 'worker',
+    satellite: true,
+    facts: ['On the Mac Pro', 'Infrastructure worker', 'Scanners & services', 'Always-on remote lane'],
+    body: [
+      'Thor is the always-on infrastructure worker on the Linux Mac Pro: scanners, scheduled services, remote execution, and operational lanes that should not live on the hub.',
+      'He stays accountable through the same safe update pipeline as the rest of the estate, with gateway health and host load checked independently.',
+    ],
+  },
+  {
+    id: 'harvey',
+    name: 'Harvey',
+    role: 'Mac Pro specialist · UK legal counsel',
+    x: 0,
+    y: 0,
+    r: 18,
     accent: 'amber',
     icon: 'shield',
     satellite: true,
@@ -293,6 +327,7 @@ export const EDGES: Edge[] = [
   { id: 'tg-mag', from: 'telegram', to: 'magnus', path: 'M 150 350 C 252 244 396 248 500 350' },
   { id: 'mag-web', from: 'magnus', to: 'web', path: 'M 500 350 C 450 246 456 142 500 78' },
   { id: 'mag-apollo', from: 'magnus', to: 'apollo', path: 'M 500 350 C 610 176 734 134 846 182', tailscale: true },
+  { id: 'mag-macpro', from: 'magnus', to: 'macpro', path: 'M 500 350 C 632 310 756 310 885 350', tailscale: true },
   { id: 'mag-nestor', from: 'magnus', to: 'nestor', path: 'M 500 350 C 626 540 734 600 846 522', tailscale: true },
   { id: 'mag-obsidian', from: 'magnus', to: 'obsidian', path: 'M 500 350 C 408 430 374 530 300 556' },
   { id: 'mag-ha', from: 'magnus', to: 'homeassistant', path: 'M 500 350 C 564 434 610 524 640 592' },
@@ -392,7 +427,7 @@ export const UPGRADES: UpgradeCard[] = [
     name: 'Weekly full-system update',
     eyebrow: 'Estate maintenance',
     blurb: 'A scheduled overnight process keeps the Hermes estate current: backup, preserve local upgrades, promote verified commits, migrate config, restart gateways, and report rollback paths.',
-    proof: 'i7, Apollo, Nestor and Home Assistant checked as one operating estate',
+    proof: 'i7, Apollo, Mac Pro, Nestor and Home Assistant checked as one operating estate',
     accent: 'cyan',
   },
   {
@@ -426,7 +461,7 @@ export const UPGRADES: UpgradeCard[] = [
   {
     name: 'New specialist agents',
     eyebrow: 'Expanding crew',
-    blurb: 'The constellation now has clearer roles for Boris, Nestor, Apollo, Sterling, The Professor, Harvey, Aegis, and Surgeon’s Assistant — each with explicit accountability and safe boundaries.',
+    blurb: 'The constellation now has clearer roles for Boris, Nestor, Apollo, Thor, Sterling, The Professor, Harvey, Aegis, and Surgeon’s Assistant — each with explicit accountability and safe boundaries.',
     proof: 'More agents, clearer handoffs, less chaos',
     accent: 'green',
   },
@@ -745,6 +780,18 @@ export const PERSONAS: Persona[] = [
     description:
       'Summoned for questions that deserve real depth. Researches patiently, compares sources, explains clearly — and files everything in the vault for next time.',
     traits: ['Curious', 'Thorough', 'Loves a footnote'],
+  },
+  {
+    id: 'thor',
+    name: 'Thor',
+    title: 'The Infrastructure Worker',
+    status: 'remote',
+    statusLabel: 'Mac Pro · Telegram',
+    accent: 'green',
+    icon: 'worker',
+    description:
+      'The always-on infrastructure worker on the Linux Mac Pro. Runs scanners, scheduled services, remote execution, and operational lanes while keeping its gateway and host health independently visible.',
+    traits: ['Infrastructure', 'Always on', 'Operational focus'],
   },
   {
     id: 'harvey',

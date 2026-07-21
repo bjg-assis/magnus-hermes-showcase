@@ -91,8 +91,8 @@ export function Capabilities() {
         <div className="system-grid">
           <article className="system-card rise">
             <span className="system-kicker">Topology</span>
-            <h3>Three computers, one mesh</h3>
-            <p>Magnus stays always-on, Apollo takes heavy remote lanes, and Nestor travels on the MacBook for strategic sessions.</p>
+            <h3>Four computers, one private mesh</h3>
+            <p>Magnus stays always-on, Apollo takes remote lanes, the Mac Pro hosts Thor and Harvey, and Nestor travels on the MacBook for strategic sessions.</p>
           </article>
           <article className="system-card rise" style={{ animationDelay: '60ms' }}>
             <span className="system-kicker">Accountability</span>
